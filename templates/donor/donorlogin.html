@@ -1,0 +1,193 @@
+{% comment %} {%load static%}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+      
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
+ 
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+
+    <!-- Main CSS-->
+    <link href="{% static "css/main.css" %}"rel="stylesheet" media="all">
+    <style>
+      body {
+        background: #f8f9fa !important;
+      }
+      .bg-overlay {
+        display: none !important;
+      }
+      .page-wrapper, .wrapper, .bg-gra-03 {
+        background: transparent !important;
+      }
+      .card.card-5 {
+        background: url('{% static "image/blood_bg.jpg" %}') no-repeat center center;
+        background-size: cover;
+        box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        border-radius: 16px;
+        border: 1px solid #b22222;
+        color: #b22222;
+        position: relative;
+        overflow: hidden;
+      }
+      .card.card-5 .card-body {
+        position: relative;
+        z-index: 2;
+      }
+      .card.card-5::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(255,255,255,0.92);
+        z-index: 1;
+      }
+      .card.card-5 * {
+        position: relative;
+        z-index: 2;
+        color: #b22222 !important;
+      }
+      .card.card-5 h2.title {
+        color: #b22222 !important;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "blood/navbar.html" %}
+
+    <div class="bg-overlay"></div>
+
+    <div class="page-wrapper bg-gra-03 p-t-45 p-b-50">
+        <div class="wrapper wrapper--w790">
+            <br><br><br>
+            <div class="card card-5">
+                <div class="card-heading">
+                    <h2 class="title">Donor Login</h2>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="name">Username</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    {% render_field form.username class="input--style-5" placeholder="Enter your username" %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Password</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    {% render_field form.password class="input--style-5" placeholder="Enter your password" %}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        
+
+                        <div>
+                            <button class="btn btn--radius-2 btn-danger" type="submit">Login</button>
+                        </div>
+                    </form>
+                    <br>
+                    <p style="text-align: center;">
+                        <a style="text-decoration: none;" href="/forgot-password/">Forgot Password?</a> | 
+                        <a style="text-decoration: none;" href="/donor/donorsignup">Register</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% include "blood/footer.html" %}
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  </body>
+</html> {% endcomment %}
+
+
+
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Login - Life-Link</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
+        body {
+            min-height: 100vh;
+            background: url("{% static 'image/blood_bg.jpg' %}") no-repeat center center/cover;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            width: 90%; max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        .glass-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .form-control {
+            width: 100%; padding: 10px 15px; border: none; border-radius: 8px; margin-bottom: 15px;
+        }
+        .btn-custom {
+            background-color: #f44336; color: white; width: 100%; border: none; padding: 10px; border-radius: 8px;
+        }
+        .btn-custom:hover { background-color: #d32f2f; }
+        .redirect-link { text-align: center; margin-top: 15px; color: white; }
+        .alert { color: white; background-color: rgba(244, 67, 54, 0.8); padding: 10px; border-radius: 8px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <h2>Donor Login</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {% render_field form.username class="form-control" placeholder="Username" required="true" %}
+            </div>
+            <div class="form-group">
+                {% render_field form.password class="form-control" placeholder="Password" required="true" %}
+            </div>
+            <button type="submit" class="btn-custom">Login</button>
+        </form>
+        <div class="redirect-link">
+            <a href="/forgot-password/" style="color: white;">Forgot Password?</a> | 
+            <a href="/donor/donorsignup" style="color: white;">Register</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+
+# Django static and media
+staticfiles/
+media/
+
+# Environment variables and local settings
+.env
+.env.*
+local_settings.py
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Render build
+build/
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Existing ignores
+*.pyo
+*.pyd
+
+venv/

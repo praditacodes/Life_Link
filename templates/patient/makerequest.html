@@ -1,0 +1,137 @@
+{% extends 'patient/patientbase.html' %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" media="all">
+    <style>
+        .request-header {
+            background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
+            color: #fff;
+            border-radius: 1rem 1rem 0 0;
+            padding: 2rem 2rem 1rem 2rem;
+            text-align: center;
+        }
+        .request-card {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            border-radius: 1rem;
+            margin-top: 2rem;
+            background: #fff;
+        }
+        .summary-card {
+            background: #f8f9fa;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 2rem;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+        }
+        .summary-icon {
+            font-size: 2.5rem;
+            color: #e52d27;
+            margin-right: 1.5rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #b31217;
+        }
+        .btn-request {
+            background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.75rem 2.5rem;
+            transition: background 0.2s;
+        }
+        .btn-request:hover {
+            background: linear-gradient(90deg, #b31217 0%, #e52d27 100%);
+        }
+        .input--style-5[readonly] {
+            background: #f1f1f1;
+            color: #888;
+        }
+    </style>
+</head>
+<div class="container">
+    <div class="summary-card">
+        <span class="summary-icon"><i class="fas fa-user-md"></i></span>
+        <div>
+            <h5 class="mb-1">Patient Information</h5>
+            <div class="row">
+                <div class="col-md-4"><strong>Name:</strong> {{ request_form.initial.patient_name }}</div>
+                <div class="col-md-4"><strong>Age:</strong> {{ request_form.initial.patient_age }}</div>
+                <div class="col-md-4"><strong>Blood Group:</strong> {{ request_form.initial.bloodgroup }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="request-card">
+                <div class="request-header">
+                    <h2 class="title mb-0"><i class="fas fa-tint mr-2"></i>Make Blood Request</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" autocomplete="off" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="form-label">Patient Name</label>
+                            {% if 'patient_name' in readonly_fields %}
+                                {% render_field request_form.patient_name|attr:'readonly:true' class="form-control input--style-5" %}
+                            {% else %}
+                                {% render_field request_form.patient_name|attr:'required:true' class="form-control input--style-5" %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Patient Age</label>
+                            {% if 'patient_age' in readonly_fields %}
+                                {% render_field request_form.patient_age|attr:'readonly:true' class="form-control input--style-5" %}
+                            {% else %}
+                                {% render_field request_form.patient_age|attr:'required:true' class="form-control input--style-5" %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Reason <span style="color:#b31217;">*</span></label>
+                            {% render_field request_form.reason|attr:'required:true' class="form-control input--style-5" placeholder="Why do you need blood?" %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Blood Group</label>
+                            {% if 'bloodgroup' in readonly_fields %}
+                                {% render_field request_form.bloodgroup|attr:'readonly:true' class="form-control input--style-5" %}
+                            {% else %}
+                                <div class="rs-select2 js-select-simple select--no-search">
+                                    <select name="bloodgroup" class="form-control input--style-5">
+                                        <option disabled="disabled" selected="selected">Choose option</option>
+                                        <option>O+</option>
+                                        <option>O-</option>
+                                        <option>A+</option>
+                                        <option>A-</option>
+                                        <option>B+</option>
+                                        <option>B-</option>
+                                        <option>AB+</option>
+                                        <option>AB-</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Unit (in ml) <span style="color:#b31217;">*</span></label>
+                            {% render_field request_form.unit|attr:'required:true' class="form-control input--style-5" placeholder="Enter required units in ml" %}
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-request" type="submit"><i class="fas fa-paper-plane mr-2"></i>Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/1c2e3b2e5a.js" crossorigin="anonymous"></script>
+{% endblock content %}
