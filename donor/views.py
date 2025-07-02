@@ -17,42 +17,47 @@ from geopy.distance import geodesic
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
+from django.db import IntegrityError
+from django.contrib import messages
 
 def donor_signup_view(request):
-    userForm=forms.DonorUserForm()
-    donorForm=forms.DonorForm()
-    mydict={'userForm':userForm,'donorForm':donorForm}
-    if request.method=='POST':
-        userForm=forms.DonorUserForm(request.POST)
-        donorForm=forms.DonorForm(request.POST,request.FILES)
+    userForm = forms.DonorUserForm()
+    donorForm = forms.DonorForm()
+    mydict = {'userForm': userForm, 'donorForm': donorForm}
+    if request.method == 'POST':
+        userForm = forms.DonorUserForm(request.POST)
+        donorForm = forms.DonorForm(request.POST, request.FILES)
         if userForm.is_valid() and donorForm.is_valid():
-            user = userForm.save(commit=False)
-            user.set_password(userForm.cleaned_data['password'])
-            user.save()
-            donor=donorForm.save(commit=False)
-            donor.user=user
-            donor.bloodgroup=donorForm.cleaned_data['bloodgroup']
-            
-            # Get location coordinates
             try:
-                geolocator = Nominatim(user_agent="blood_link")
-                location_str = f"{donor.address}, {donor.city}, {donor.state}, {donor.pincode}"
-                location = geolocator.geocode(location_str, timeout=10)
-                if location:
-                    donor.latitude = location.latitude
-                    donor.longitude = location.longitude
-            except Exception as e:
-                # Log the error or pass, but do not block registration
-                pass
-            
-            donor.save()
-            my_donor_group, created = Group.objects.get_or_create(name='DONOR')
-            user.groups.add(my_donor_group)
-            user.is_staff = False
-            user.is_superuser = False
-            user.save()
-        return HttpResponseRedirect('donorlogin')
-    return render(request,'donor/donorsignup.html',context=mydict)
+                user = userForm.save(commit=False)
+                user.set_password(userForm.cleaned_data['password'])
+                user.is_staff = False
+                user.is_superuser = False
+                user.is_active = True
+                user.save()
+                my_donor_group, created = Group.objects.get_or_create(name='DONOR')
+                user.groups.add(my_donor_group)
+                donor = donorForm.save(commit=False)
+                donor.user = user
+                donor.bloodgroup = donorForm.cleaned_data['bloodgroup']
+                # Get location coordinates
+                try:
+                    geolocator = Nominatim(user_agent="blood_link")
+                    location_str = f"{donor.address}, {donor.city}, {donor.state}, {donor.pincode}"
+                    location = geolocator.geocode(location_str, timeout=10)
+                    if location:
+                        donor.latitude = location.latitude
+                        donor.longitude = location.longitude
+                except Exception as e:
+                    pass
+                donor.save()
+                messages.success(request, 'Registration successful! You can now log in.')
+                return HttpResponseRedirect('donorlogin')
+            except IntegrityError:
+                messages.error(request, 'A user with that username or email already exists.')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    return render(request, 'donor/donorsignup.html', context=mydict)
 
 
 def donor_dashboard_view(request):
@@ -76,9 +81,12 @@ def donate_blood_view(request):
     if request.method == 'POST':
         donation_form = forms.DonationForm(request.POST)
         if donation_form.is_valid():
+            if donor.age is None or donor.age == '':
+                messages.error(request, 'Your age is not set. Please contact admin to update your profile before donating.')
+                return render(request, 'donor/donate_blood.html', {'donation_form': donation_form})
             blood_donate = donation_form.save(commit=False)
             blood_donate.bloodgroup = donor.bloodgroup
-            blood_donate.age = getattr(donor, 'age', '')
+            blood_donate.age = donor.age
             blood_donate.donor = donor
             blood_donate.save()
             return HttpResponseRedirect('donation-history')  
@@ -146,3 +154,16 @@ def download_certificate(request, donation_id):
     p.showPage()
     p.save()
     return response
+
+@login_required(login_url='donorlogin')
+def donor_profile_view(request):
+    donor = models.Donor.objects.get(user_id=request.user.id)
+    if request.method == 'POST':
+        form = forms.DonorForm(request.POST, request.FILES, instance=donor)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('donor-profile')
+    else:
+        form = forms.DonorForm(instance=donor)
+    return render(request, 'donor/donor_profile.html', {'form': form})

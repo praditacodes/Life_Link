@@ -172,7 +172,7 @@ def admin_donor_view(request):
 @login_required(login_url='adminlogin')
 def update_donor_view(request,pk):
     donor=dmodels.Donor.objects.get(id=pk)
-    user=dmodels.User.objects.get(id=donor.user_id)
+    user=CustomUser.objects.get(id=donor.user_id)
     userForm=dforms.DonorUserForm(instance=user)
     donorForm=dforms.DonorForm(request.FILES,instance=donor)
     mydict={'userForm':userForm,'donorForm':donorForm}
@@ -194,10 +194,10 @@ def update_donor_view(request,pk):
 @login_required(login_url='adminlogin')
 def delete_donor_view(request,pk):
     donor=dmodels.Donor.objects.get(id=pk)
-    user=User.objects.get(id=donor.user_id)
-    user.delete()
+    user=CustomUser.objects.get(id=donor.user_id)
     donor.delete()
-    return HttpResponseRedirect('/admin-donor')
+    user.delete()
+    return redirect('admin-donor')
 
 @login_required(login_url='adminlogin')
 def admin_patient_view(request):
@@ -230,10 +230,10 @@ def update_patient_view(request,pk):
 @login_required(login_url='adminlogin')
 def delete_patient_view(request,pk):
     patient=pmodels.Patient.objects.get(id=pk)
-    user=User.objects.get(id=patient.user_id)
-    user.delete()
+    user=CustomUser.objects.get(id=patient.user_id)
     patient.delete()
-    return HttpResponseRedirect('/admin-patient')
+    user.delete()
+    return redirect('admin-patient')
 
 @login_required(login_url='adminlogin')
 def admin_request_view(request):

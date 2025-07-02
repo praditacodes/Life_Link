@@ -110,7 +110,7 @@
             <div class="dashboard-avatar">
                 <i class="fas fa-tint"></i>
             </div>
-            <div class="dashboard-title">Welcome, Donor!</div>
+            <div class="dashboard-title">Welcome, {{ user.first_name }}!</div>
             <div class="dashboard-subtitle">Track your blood donation requests and their statuses below.</div>
         </div>
         <div class="stats-row">
@@ -135,6 +135,7 @@
                 <div class="stat-value">{{requestrejected}}</div>
             </div>
         </div>
+        <a href="/donor/profile" class="btn btn-info mb-3">Update Profile</a>
     </div>
 </div>
 {% endblock content %}

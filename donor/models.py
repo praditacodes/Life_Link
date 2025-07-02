@@ -2,9 +2,15 @@ from django.db import models
 from django.conf import settings
 
 class Donor(models.Model):
+    BLOOD_GROUP_CHOICES = [
+        ('O+', 'O+'), ('O-', 'O-'),
+        ('A+', 'A+'), ('A-', 'A-'),
+        ('B+', 'B+'), ('B-', 'B-'),
+        ('AB+', 'AB+'), ('AB-', 'AB-'),
+    ]
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     profile_pic= models.ImageField(upload_to='profile_pic/Donor/',null=True,blank=True)
-    bloodgroup=models.CharField(max_length=10)
+    bloodgroup=models.CharField(max_length=10, choices=BLOOD_GROUP_CHOICES)
     age = models.PositiveIntegerField(null=True, blank=True)
     address = models.CharField(max_length=40)
     mobile = models.CharField(max_length=20,null=False)

@@ -9,4 +9,5 @@ urlpatterns = [
     path('donate-blood', views.donate_blood_view,name='donate-blood'),
     path('donation-history', views.donation_history_view,name='donation-history'),
     path('download-certificate/<int:donation_id>/', views.download_certificate, name='download-certificate'),
+    path('profile', views.donor_profile_view, name='donor-profile'),
 ]

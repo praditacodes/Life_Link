@@ -59,10 +59,14 @@
         text-align: center;
     }
 </style>
+<!-- {#
 <div class="dashboard-header">
-    <h2 class="mb-1"><i class="fas fa-user-md mr-2"></i>Welcome to Your Patient Dashboard</h2>
+    
     <p class="mb-0">Track your blood requests, view status, and connect with donors easily.</p>
 </div>
+#} -->
+<h2>Welcome, {{ user.first_name }}!</h2>
+<p>Track your blood requests, view status, and connect with donors easily.</p>
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-3 col-6">
