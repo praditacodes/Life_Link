@@ -104,7 +104,7 @@ a:hover {
 }
 
 body {
-    background: url('{% static "image/blood_bg.jpg" %}') no-repeat center center fixed !important;
+    background: url("/static/image/blood_bg.jpg") no-repeat center center fixed !important;
     background-size: cover !important;
     position: relative;
 }
