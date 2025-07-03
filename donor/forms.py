@@ -35,6 +35,7 @@ class DonorForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['profile_pic'].required = False
+        self.fields['age'].required = True
         self.fields['address'].widget.attrs['class'] = 'form-control'
         self.fields['address'].widget.attrs['placeholder'] = 'Enter your full address'
         self.fields['city'].widget.attrs['class'] = 'form-control'

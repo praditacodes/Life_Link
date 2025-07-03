@@ -63,10 +63,10 @@ def donor_signup_view(request):
 def donor_dashboard_view(request):
     donor= models.Donor.objects.get(user_id=request.user.id)
     dict={
-        'requestpending': bmodels.BloodRequest.objects.all().filter(request_by_donor=donor).filter(status='Pending').count(),
-        'requestapproved': bmodels.BloodRequest.objects.all().filter(request_by_donor=donor).filter(status='Approved').count(),
-        'requestmade': bmodels.BloodRequest.objects.all().filter(request_by_donor=donor).count(),
-        'requestrejected': bmodels.BloodRequest.objects.all().filter(request_by_donor=donor).filter(status='Rejected').count(),
+        'requestpending': models.BloodDonate.objects.filter(donor=donor, status='Pending').count(),
+        'requestapproved': models.BloodDonate.objects.filter(donor=donor, status='Approved').count(),
+        'requestmade': models.BloodDonate.objects.filter(donor=donor).count(),
+        'requestrejected': models.BloodDonate.objects.filter(donor=donor, status='Rejected').count(),
     }
     return render(request,'donor/donor_dashboard.html',context=dict)
 
