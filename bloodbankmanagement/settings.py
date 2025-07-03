@@ -30,6 +30,10 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = ['https://life-link-z8pu.onrender.com']
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 
@@ -60,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_otp.middleware.OTPMiddleware',
 ]
-CSRF_COOKIE_SECURE=False
+
 ROOT_URLCONF = 'bloodbankmanagement.urls'
 
 TEMPLATES = [
@@ -143,7 +147,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'praditabadal5@gmail.com'
-EMAIL_HOST_PASSWORD = 'fhperksobsrselcq'  # <-- paste the app password here
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Use env var for security
 EMAIL_RECEIVING_USER = ['support@bloodlink.com'] # email on which you will receive messages sent from website
 
 # Default primary key field type
