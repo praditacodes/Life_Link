@@ -32,7 +32,7 @@ def patient_signup_view(request):
             user.is_superuser = False
             user.save()
             print('Patient registration successful:', user.username)
-            return HttpResponseRedirect('patientlogin')
+            return redirect('patientlogin')
         else:
             print('Patient registration failed. UserForm errors:', userForm.errors)
             print('Patient registration failed. PatientForm errors:', patientForm.errors)

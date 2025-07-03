@@ -52,7 +52,7 @@ def donor_signup_view(request):
                     pass
                 donor.save()
                 messages.success(request, 'Registration successful! You can now log in.')
-                return HttpResponseRedirect('donorlogin')
+                return redirect('donorlogin')
             except IntegrityError:
                 messages.error(request, 'A user with that username or email already exists.')
         else:

@@ -162,3 +162,5 @@ load_dotenv()
 
 AUTH_USER_MODEL = 'blood.CustomUser'
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+

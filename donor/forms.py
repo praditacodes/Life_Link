@@ -32,10 +32,8 @@ class DonationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # If initial values are set, make bloodgroup and age read-only
+        # If initial values are set, make bloodgroup and age read-only (not disabled)
         if self.initial.get('bloodgroup'):
             self.fields['bloodgroup'].widget.attrs['readonly'] = True
-            self.fields['bloodgroup'].widget.attrs['disabled'] = True
         if self.initial.get('age'):
             self.fields['age'].widget.attrs['readonly'] = True
-            self.fields['age'].widget.attrs['disabled'] = True
