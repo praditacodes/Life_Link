@@ -3,11 +3,11 @@ from django.conf import settings
 
 class Patient(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    profile_pic= models.ImageField(upload_to='profile_pic/Patient/',null=True,blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pic/Patient/', null=True, blank=True)
 
     age=models.PositiveIntegerField()
     bloodgroup=models.CharField(max_length=10)
-    disease=models.CharField(max_length=100)
+    cause = models.CharField(max_length=100, blank=True, default="")
     doctorname=models.CharField(max_length=50)
 
     address = models.CharField(max_length=40)

@@ -15,9 +15,9 @@
         border-radius: 1rem;
         box-shadow: 0 4px 24px rgba(0,0,0,0.10);
         background: #fff;
-        padding: 2rem 1rem;
+        padding: 2.2rem 1.2rem 2.2rem 1.2rem;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
         transition: box-shadow 0.2s;
     }
     .stat-card:hover {
@@ -44,9 +44,9 @@
         font-weight: 600;
         border: none;
         border-radius: 2rem;
-        padding: 0.75rem 2.5rem;
+        padding: 0.85rem 2.7rem;
         font-size: 1.1rem;
-        margin-top: 2rem;
+        margin-top: 2.5rem;
         transition: background 0.2s;
     }
     .cta-btn:hover {
@@ -55,8 +55,27 @@
     .welcome-msg {
         font-size: 1.2rem;
         color: #444;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
+        margin-top: 1.5rem;
         text-align: center;
+    }
+    .container-fluid {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    @media (max-width: 767px) {
+        .container-fluid {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .stat-card {
+            margin-bottom: 1.5rem;
+            padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+        }
+        .welcome-msg {
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+        }
     }
 </style>
 <!-- {#

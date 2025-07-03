@@ -85,12 +85,12 @@
                 {% render_field donation_form.bloodgroup class="form-control" required="true" %}
             </div>
             <div class="form-group">
-                <label>Unit (in ml)</label>
+                <label>Unit (1 unit = 450 ml)</label>
                 {% render_field donation_form.unit class="form-control" required="true" %}
             </div>
             <div class="form-group">
-                <label>Disease (if any)</label>
-                {% render_field donation_form.disease class="form-control" required="true" %}
+                <label>Cause (e.g., accident, surgery, etc.)</label>
+                {% render_field donation_form.cause class="form-control" %}
             </div>
             <div class="form-group">
                 <label>Age</label>

@@ -53,9 +53,23 @@
             <div class="form-group">
                 {% render_field form.username class="form-control" placeholder="Username" required="true" %}
             </div>
-            <div class="form-group">
-                {% render_field form.password class="form-control" placeholder="Password" required="true" %}
+            <div class="form-group" style="position:relative;">
+                {% render_field form.password class="form-control" placeholder="Password" required="true" id="patient-password" %}
+                <span toggle="#patient-password" class="fa fa-fw fa-eye field-icon toggle-password" style="position:absolute;top:50%;right:15px;transform:translateY(-50%);cursor:pointer;"></span>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const toggle = document.querySelector('.toggle-password');
+                    const password = document.getElementById('patient-password');
+                    if (toggle && password) {
+                        toggle.addEventListener('click', function() {
+                            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                            password.setAttribute('type', type);
+                            this.classList.toggle('fa-eye-slash');
+                        });
+                    }
+                });
+            </script>
             <button type="submit" class="btn-custom">Login</button>
         </form>
         <div class="redirect-link">

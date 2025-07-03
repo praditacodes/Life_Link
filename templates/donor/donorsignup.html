@@ -221,10 +221,10 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="name">Profile Pic</div>
+                            <div class="name">Profile Picture</div>
                             <div class="value">
                                 <div class="input-group">
-                                    {% render_field donorForm.profile_pic|attr:'required:true'  class="input--style-5"  %}
+                                    {% render_field donorForm.profile_pic class="input--style-5" %}
                                 </div>
                             </div>
                         </div>
@@ -355,7 +355,7 @@
                     {% render_field donorForm.mobile class="form-control" placeholder="Mobile Number" required="true" %}
                 </div>
                 <div class="form-group">
-                    {% render_field donorForm.profile_pic class="form-control" required="true" %}
+                    {% render_field donorForm.profile_pic class="form-control" %}
                 </div>
                 <button type="submit" class="btn-custom">Register</button>
             </form>

@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: Life_Link
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn bloodbankmanagement.wsgi:application"
+    releaseCommand: "python manage.py createsuperuser --noinput --username $DJANGO_SUPERUSER_USERNAME --email $DJANGO_SUPERUSER_EMAIL" 

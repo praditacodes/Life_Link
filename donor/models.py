@@ -33,7 +33,7 @@ class Donor(models.Model):
 
 class BloodDonate(models.Model): 
     donor=models.ForeignKey(Donor,on_delete=models.CASCADE)   
-    disease=models.CharField(max_length=100,default="Nothing")
+    cause=models.CharField(max_length=100,blank=True,default="")
     age=models.PositiveIntegerField()
     bloodgroup=models.CharField(max_length=10)
     unit=models.PositiveIntegerField(default=0)
