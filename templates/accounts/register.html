@@ -1,0 +1,144 @@
+{% extends 'blood/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container mt-5 mb-5" style="max-width: 600px;">
+    <div class="card shadow-lg">
+        <div class="card-header bg-danger text-white text-center">
+            <h2 class="mb-0"><i class="fas fa-user-plus mr-2"></i>Register</h2>
+        </div>
+        <div class="card-body p-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="POST" enctype="multipart/form-data" autocomplete="off">
+                {% csrf_token %}
+                <h5 class="mb-3 text-danger"><i class="fas fa-user mr-2"></i>Account Information</h5>
+                <div class="form-group">
+                    {% render_field user_form.username class="form-control" placeholder="Username" required="true" %}
+                    {% if user_form.username.errors %}
+                        <div class="text-danger small">{{ user_form.username.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {% render_field user_form.first_name class="form-control" placeholder="First Name" required="true" %}
+                        {% if user_form.first_name.errors %}
+                            <div class="text-danger small">{{ user_form.first_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {% render_field user_form.last_name class="form-control" placeholder="Last Name" required="true" %}
+                        {% if user_form.last_name.errors %}
+                            <div class="text-danger small">{{ user_form.last_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {% render_field user_form.email class="form-control" placeholder="Email" required="true" %}
+                    {% if user_form.email.errors %}
+                        <div class="text-danger small">{{ user_form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {% render_field user_form.password1 class="form-control" placeholder="Password" required="true" %}
+                    {% if user_form.password1.errors %}
+                        <div class="text-danger small">{{ user_form.password1.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {% render_field user_form.password2 class="form-control" placeholder="Confirm Password" required="true" %}
+                    {% if user_form.password2.errors %}
+                        <div class="text-danger small">{{ user_form.password2.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <hr>
+                <h5 class="mb-3 text-danger"><i class="fas fa-id-card mr-2"></i>Profile Information (Optional)</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {% render_field profile_form.age class="form-control" placeholder="Age" %}
+                        {% if profile_form.age.errors %}
+                            <div class="text-danger small">{{ profile_form.age.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {% render_field profile_form.blood_group class="form-control" %}
+                        <small class="form-text text-muted">Select your blood group (required)</small>
+                        {% if profile_form.blood_group.errors %}
+                            <div class="text-danger small">{{ profile_form.blood_group.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {% render_field profile_form.phone class="form-control" placeholder="Phone Number" %}
+                    {% if profile_form.phone.errors %}
+                        <div class="text-danger small">{{ profile_form.phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {% render_field profile_form.address class="form-control" placeholder="Address" %}
+                    {% if profile_form.address.errors %}
+                        <div class="text-danger small">{{ profile_form.address.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {% render_field profile_form.city class="form-control" placeholder="City" %}
+                        {% if profile_form.city.errors %}
+                            <div class="text-danger small">{{ profile_form.city.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {% render_field profile_form.state class="form-control" placeholder="State" %}
+                        {% if profile_form.state.errors %}
+                            <div class="text-danger small">{{ profile_form.state.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {% render_field profile_form.pincode class="form-control" placeholder="Pincode" %}
+                        {% if profile_form.pincode.errors %}
+                            <div class="text-danger small">{{ profile_form.pincode.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {% render_field profile_form.profile_pic class="form-control-file" %}
+                        {% if profile_form.profile_pic.errors %}
+                            <div class="text-danger small">{{ profile_form.profile_pic.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-bold">Can Donate?</label>
+                        {% render_field profile_form.can_donate class="form-control" %}
+                        {% if profile_form.can_donate.errors %}
+                            <div class="text-danger small">{{ profile_form.can_donate.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-bold">Can Receive?</label>
+                        {% render_field profile_form.can_receive class="form-control" %}
+                        {% if profile_form.can_receive.errors %}
+                            <div class="text-danger small">{{ profile_form.can_receive.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {% render_field profile_form.cause class="form-control" placeholder="Reason (if requesting blood)" %}
+                    {% if profile_form.cause.errors %}
+                        <div class="text-danger small">{{ profile_form.cause.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-danger btn-block mt-3">Register</button>
+            </form>
+            <div class="text-center mt-3">
+                Already have an account? <a href="/accounts/login/">Login here</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -3,131 +3,133 @@
 {% load widget_tweaks %}
 {% load static %}
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Segoe+UI:400,600,700|Roboto:400,500,700&display=swap" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/main.css' %}" rel="stylesheet" media="all">
     <style>
-        .request-header {
-            background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
-            color: #fff;
-            border-radius: 1rem 1rem 0 0;
-            padding: 2rem 2rem 1rem 2rem;
-            text-align: center;
-        }
+        body { background: #f7fafd; }
         .request-card {
-            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-            border-radius: 1rem;
-            margin-top: 2rem;
+            background: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-top: 3rem;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            transition: box-shadow 0.2s;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+        .request-header {
+            background: #d32f2f;
+            color: #fff;
+            border-radius: 1.2rem 1.2rem 0 0;
+            padding: 1.5rem 1rem 1rem 1rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+            position: relative;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+        label {
+            color: #d32f2f;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
+        }
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+        .form-control {
+            border-radius: 0.7rem;
+            border: 1.5px solid #e3e8ee;
+            padding: 0.7rem 1.1rem;
+            font-size: 1rem;
+            background: #f7fafd;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 0.12rem rgba(25,118,210,0.13);
             background: #fff;
         }
-        .summary-card {
-            background: #f8f9fa;
-            border-radius: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 2rem;
-            padding: 1.5rem 2rem;
-            display: flex;
-            align-items: center;
-        }
-        .summary-icon {
-            font-size: 2.5rem;
-            color: #e52d27;
-            margin-right: 1.5rem;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #b31217;
-        }
-        .btn-request {
-            background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
-            color: #fff;
-            font-weight: 600;
+        .btn-primary {
+            background: #1976d2 !important;
             border: none;
-            border-radius: 2rem;
-            padding: 0.75rem 2.5rem;
-            transition: background 0.2s;
+            color: #fff !important;
+            border-radius: 1.2rem;
+            font-weight: 700;
+            padding: 0.7rem 2.2rem;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(25,118,210,0.10);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+            margin-top: 0.5rem;
         }
-        .btn-request:hover {
-            background: linear-gradient(90deg, #b31217 0%, #e52d27 100%);
+        .btn-primary:hover {
+            background: #d32f2f !important;
+            color: #fff !important;
+            box-shadow: 0 4px 16px rgba(211,47,47,0.16);
+            transform: translateY(-2px) scale(1.04);
         }
-        .input--style-5[readonly] {
-            background: #f1f1f1;
-            color: #888;
+        .alert-danger {
+            color: #fff;
+            background-color: #d32f2f;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 1rem;
+            text-align: center;
         }
     </style>
 </head>
 <div class="container">
-    <div class="summary-card">
-        <span class="summary-icon"><i class="fas fa-user-md"></i></span>
-        <div>
-            <h5 class="mb-1">Patient Information</h5>
-            <div class="row">
-                <div class="col-md-4"><strong>Name:</strong> {{ request_form.initial.patient_name }}</div>
-                <div class="col-md-4"><strong>Age:</strong> {{ request_form.initial.patient_age }}</div>
-                <div class="col-md-4"><strong>Blood Group:</strong> {{ request_form.initial.bloodgroup }}</div>
-            </div>
+    <div class="request-card mx-auto">
+        <div class="request-header">
+            Make a Blood Request
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="request-card">
-                <div class="request-header">
-                    <h2 class="title mb-0"><i class="fas fa-tint mr-2"></i>Make Blood Request</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% if request_form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                    {% for field in request_form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in request_form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
                 </div>
-                <div class="card-body p-4">
-                    <form method="POST" autocomplete="off" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label class="form-label">Patient Name</label>
-                            {% if 'patient_name' in readonly_fields %}
-                                {% render_field request_form.patient_name|attr:'readonly:true' class="form-control input--style-5" %}
-                            {% else %}
-                                {% render_field request_form.patient_name|attr:'required:true' class="form-control input--style-5" %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Patient Age</label>
-                            {% if 'patient_age' in readonly_fields %}
-                                {% render_field request_form.patient_age|attr:'readonly:true' class="form-control input--style-5" %}
-                            {% else %}
-                                {% render_field request_form.patient_age|attr:'required:true' class="form-control input--style-5" %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Reason <span style="color:#b31217;">*</span></label>
-                            {% render_field request_form.reason|attr:'required:true' class="form-control input--style-5" placeholder="Why do you need blood?" %}
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Blood Group</label>
-                            {% if 'bloodgroup' in readonly_fields %}
-                                {% render_field request_form.bloodgroup|attr:'readonly:true' class="form-control input--style-5" %}
-                            {% else %}
-                                <div class="rs-select2 js-select-simple select--no-search">
-                                    <select name="bloodgroup" class="form-control input--style-5">
-                                        <option disabled="disabled" selected="selected">Choose option</option>
-                                        <option>O+</option>
-                                        <option>O-</option>
-                                        <option>A+</option>
-                                        <option>A-</option>
-                                        <option>B+</option>
-                                        <option>B-</option>
-                                        <option>AB+</option>
-                                        <option>AB-</option>
-                                    </select>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Unit (in ml) <span style="color:#b31217;">*</span></label>
-                            {% render_field request_form.unit|attr:'required:true' class="form-control input--style-5" placeholder="Enter required units in ml" %}
-                        </div>
-                        <div class="text-center mt-4">
-                            <button class="btn btn-request" type="submit"><i class="fas fa-paper-plane mr-2"></i>Request</button>
-                        </div>
-                    </form>
-                </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="id_blood_group">Blood Group</label>
+                {{ request_form.blood_group|add_class:'form-control' }}
             </div>
-        </div>
+            <div class="form-group">
+                <label for="id_unit">Unit (in ml)</label>
+                {{ request_form.unit|add_class:'form-control' }}
+            </div>
+            <div class="form-group">
+                <label for="id_reason">Reason</label>
+                {{ request_form.reason|add_class:'form-control' }}
+            </div>
+            <div class="form-group">
+                <label for="id_patient_name">Patient Name</label>
+                {{ request_form.patient_name|add_class:'form-control' }}
+            </div>
+            <div class="form-group">
+                <label for="id_patient_age">Age</label>
+                {{ request_form.patient_age|add_class:'form-control' }}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Request</button>
+            </div>
+        </form>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

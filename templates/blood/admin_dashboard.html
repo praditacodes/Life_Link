@@ -224,18 +224,31 @@
       </div>
     </div>
 </div>
+
+<!-- Safely inject chart data -->
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_data|json_script:"chart-data" }}
+{{ bg_labels|json_script:"bg-labels" }}
+{{ bg_data|json_script:"bg-data" }}
+
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  // Parse data from safe script tags
+  var chartLabels = JSON.parse(document.getElementById('chart-labels').textContent);
+  var chartData = JSON.parse(document.getElementById('chart-data').textContent);
+  var bgLabels = JSON.parse(document.getElementById('bg-labels').textContent);
+  var bgData = JSON.parse(document.getElementById('bg-data').textContent);
+
   // Donations Per Month
   var ctx1 = document.getElementById('donationsChart').getContext('2d');
   var donationsChart = new Chart(ctx1, {
     type: 'bar',
     data: {
-      labels: {{ chart_labels|safe }},
+      labels: chartLabels,
       datasets: [{
         label: 'Units Donated',
-        data: {{ chart_data|safe }},
+        data: chartData,
         backgroundColor: 'rgba(244,67,54,0.7)',
         borderColor: 'rgba(244,67,54,1)',
         borderWidth: 2
@@ -252,10 +265,10 @@
   var bloodGroupChart = new Chart(ctx2, {
     type: 'pie',
     data: {
-      labels: {{ bg_labels|safe }},
+      labels: bgLabels,
       datasets: [{
         label: 'Units',
-        data: {{ bg_data|safe }},
+        data: bgData,
         backgroundColor: [
           '#f44336','#e57373','#ba68c8','#64b5f6','#4caf50','#ffd54f','#ff8a65','#a1887f'
         ],

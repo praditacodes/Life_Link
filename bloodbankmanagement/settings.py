@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_otp',
     'django_otp.plugins.otp_totp',
     'phonenumber_field',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -147,8 +148,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'praditabadal5@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Use env var for security
-EMAIL_RECEIVING_USER = ['support@bloodlink.com'] # email on which you will receive messages sent from website
+EMAIL_HOST_PASSWORD = 'mpeo nbzn tyrz okkl'
+EMAIL_RECEIVING_USER = ['support@bloodlink.com']
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -167,4 +168,7 @@ load_dotenv()
 AUTH_USER_MODEL = 'blood.CustomUser'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

@@ -1,151 +1,49 @@
-/* Modern color scheme for login and registration pages */
-.page-wrapper {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Strict Red and White Palette */
+body, .page-wrapper {
+    background: #fff !important;
 }
 
-.card-5 {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+.card-5 .card-heading, .card-5 .title, .form-row .name, .input-group i, a, a:visited, .font-weight-bold, .sidebar ul li a, .sidebar ul li a:visited {
+    color: #E53935 !important;
+    background: none !important;
 }
 
-.card-5 .card-heading {
-    background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
-    border-radius: 15px 15px 0 0;
-    padding: 20px;
-}
-
-.card-5 .title {
-    color: #ffffff;
-    font-size: 24px;
-    font-weight: 600;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.input--style-5 {
-    background: #f8f9fa;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    color: #495057;
-    font-size: 15px;
-    padding: 12px 15px;
-    transition: all 0.3s ease;
-}
-
-.input--style-5:focus {
-    border-color: #4b6cb7;
-    box-shadow: 0 0 0 0.2rem rgba(75, 108, 183, 0.25);
-}
-
-.btn--radius-2 {
-    background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
-    border: none;
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 12px 30px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-}
-
-.btn--radius-2:hover {
-    background: linear-gradient(135deg, #182848 0%, #4b6cb7 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.form-row .name {
-    color: #495057;
-    font-weight: 600;
-}
-
-/* Custom styles for form validation */
-.input--style-5.is-invalid {
-    border-color: #dc3545;
-    background-image: none;
-}
-
-.input--style-5.is-valid {
-    border-color: #28a745;
-    background-image: none;
-}
-
-/* Custom styles for form groups */
-.form-row {
-    margin-bottom: 25px;
-}
-
-.input-group {
-    position: relative;
-}
-
-/* Custom styles for icons */
-.input-group i {
-    color: #6c757d;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* Custom styles for links */
-a {
-    color: #4b6cb7;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-a:hover {
-    color: #182848;
-    text-decoration: none;
-}
-
-body {
-    background: url("/static/image/blood_bg.jpg") no-repeat center center fixed !important;
-    background-size: cover !important;
-    position: relative;
-}
-
-.navbar, .sidebar, .main-header, .header, .dashboard-header {
-    background: #B22222 !important; /* Blood red */
+a:hover, .sidebar ul li a:hover, .sidebar ul li.active a {
+    background: #E53935 !important;
     color: #fff !important;
 }
 
-.sidebar ul li a, .sidebar ul li a:visited {
+.btn, .btn-primary, .btn-danger, .btn--radius-2, .sidebar .logout-btn, .sidebar .social_media a {
+    background: #E53935 !important;
+    border-color: #E53935 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+.btn:hover, .btn-primary:hover, .btn-danger:hover, .btn--radius-2:hover, .sidebar .logout-btn:hover, .sidebar .social_media a:hover {
+    background: #D32F2F !important;
     color: #fff !important;
 }
 
-.sidebar ul li a:hover, .sidebar ul li.active a {
-    background: #8A0303 !important; /* Darker blood red */
+input, select, textarea, .input--style-5 {
+    background: #fff !important;
+    color: #222 !important;
+    border: 1px solid #E53935 !important;
+    border-radius: 0.5rem !important;
+}
+
+input:focus, select:focus, textarea:focus, .input--style-5:focus {
+    border-color: #E53935 !important;
+    box-shadow: 0 0 0 2px rgba(229,57,53,0.12) !important;
+}
+
+.table thead, .table th {
+    background: #E53935 !important;
     color: #fff !important;
 }
 
-.btn-primary, .btn--radius-2 {
-    background: #D7263D !important;
-    border-color: #D7263D !important;
-    color: #fff !important;
-}
-
-.table thead {
-    background: #B22222 !important;
-    color: #fff !important;
-}
-
-.card, .dashboard-card {
-    border: 1px solid #B22222;
-}
-
-a, a:visited {
-    color: #B22222;
-}
-a:hover {
-    color: #D7263D;
-}
-
-.card.card-5 {
-    background: rgba(255,255,255,0.92) !important;
-    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+.rounded-circle.mb-2, .sidebar .rounded-circle.mb-2 {
+    border: 3px solid #E53935 !important;
+    background: #fff !important;
+    color: #E53935 !important;
 } 

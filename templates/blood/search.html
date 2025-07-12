@@ -1,209 +1,192 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Search Donors - blood-link</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
-    <link href="{% static 'css/custom.css' %}" rel="stylesheet" media="all">
-    <style>
-        body {
-            background: #f3f5f9;
-        }
-        .hero-section {
-            background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
-            color: #fff;
-            padding: 3rem 0 2rem 0;
-            text-align: center;
-            border-radius: 0 0 2rem 2rem;
-            margin-bottom: 2rem;
-        }
-        .hero-section h1 {
-            font-weight: 700;
-            font-size: 2.5rem;
-        }
-        .search-form {
-            background: #fff;
-            padding: 2rem 2.5rem 1.5rem 2.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-            margin-bottom: 2rem;
-        }
-        .search-form label {
-            font-weight: 600;
-            color: #b31217;
-        }
-        .btn-search {
-            background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
-            color: #fff;
-            font-weight: 600;
-            border: none;
-            border-radius: 2rem;
-            padding: 0.75rem 2.5rem;
-            font-size: 1.1rem;
-            transition: background 0.2s;
-        }
-        .btn-search:hover {
-            background: linear-gradient(90deg, #b31217 0%, #e52d27 100%);
-        }
-        .results-container {
-            margin-top: 30px;
-        }
-        .donor-card {
-            background: #fff;
-            border-radius: 1rem;
-            padding: 1.5rem 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-        .donor-card:hover {
-            transform: translateY(-5px);
-        }
-        .donor-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #e52d27;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            margin-right: 2rem;
-        }
-        .distance-badge {
-            background: #4b6cb7;
-            color: white;
-            padding: 7px 18px;
-            border-radius: 20px;
-            font-size: 1em;
-            font-weight: 600;
-            margin-left: auto;
-        }
-        .donor-info h4 {
-            margin-bottom: 0.3rem;
-            font-weight: 700;
-        }
-        .donor-info p {
-            margin-bottom: 0.2rem;
-        }
-    </style>
-</head>
-<body>
-    {% include "blood/navbar.html" %}
-    <div class="hero-section">
-        <h1><i class="fas fa-search mr-2"></i>Find Blood Donors Near You</h1>
-        <p class="lead mb-0">Search for available donors by blood group, city, and distance.</p>
-    </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
-                <div class="search-form mb-4">
-                    <form method="GET" action="{% url 'search-donors' %}">
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="bloodgroup"><i class="fas fa-tint"></i> Blood Group</label>
-                                <select name="bloodgroup" id="bloodgroup" class="form-control">
-                                    <option value="">Select Blood Group</option>
-                                    <option value="A+">A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="city"><i class="fas fa-city"></i> City</label>
-                                <input type="text" name="city" id="city" class="form-control" placeholder="Enter your city">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="radius"><i class="fas fa-ruler-horizontal"></i> Radius (km)</label>
-                                <input type="number" name="radius" id="radius" class="form-control" value="10" min="1" max="100">
-                            </div>
-                        </div>
-                        <div class="text-center mt-3">
-                            <button type="submit" class="btn btn-search"><i class="fas fa-search mr-2"></i>Search Donors</button>
-                        </div>
-                    </form>
-                </div>
-                {% if donors %}
-                <div class="results-container">
-                    <h4 class="mb-4"><i class="fas fa-users mr-2"></i>Found {{ donors|length }} Donor{{ donors|length|pluralize }}</h4>
-                    {% for donor in donors %}
-                    <div class="donor-card">
-                        <div class="donor-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="donor-info">
-                            <h4>{{ donor.get_name }}</h4>
-                            <p><strong>Blood Group:</strong> {{ donor.bloodgroup }}</p>
-                            <p><strong>Location:</strong> {{ donor.city }}, {{ donor.state }}</p>
-                            <p><strong>Contact:</strong> {{ donor.mobile }}</p>
-                        </div>
-                        <span class="distance-badge"><i class="fas fa-map-marker-alt"></i> {{ donor.distance|floatformat:1 }} km</span>
-                    </div>
-                    {% endfor %}
-                </div>
-                <!-- Leaflet Map Integration -->
-                <div id="donor-map" style="height: 400px; margin-bottom: 2rem; border-radius: 1rem; overflow: hidden;"></div>
-                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-                <!-- End Leaflet Map Integration -->
-                {% elif request.GET %}
-                <div class="alert alert-info mt-4">
-                    <i class="fas fa-info-circle"></i> No donors found matching your criteria.
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-{% if donors and donors|length > 0 %}
-<script>
-    var donors = [
-        {% for donor in donors %}
-        {
-            name: "{{ donor.get_name|escapejs }}",
-            bloodgroup: "{{ donor.bloodgroup|escapejs }}",
-            contact: "{{ donor.mobile|escapejs }}",
-            lat: {{ donor.latitude|default:'"null"' }},
-            lng: {{ donor.longitude|default:'"null"' }},
-            city: "{{ donor.city|escapejs }}",
-            state: "{{ donor.state|escapejs }}"
-        }{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    ];
-    donors = donors.map(function(d) {
-        d.lat = (d.lat !== null && d.lat !== undefined) ? parseFloat(d.lat) : null;
-        d.lng = (d.lng !== null && d.lng !== undefined) ? parseFloat(d.lng) : null;
-        return d;
-    }).filter(function(d) { return d.lat !== null && d.lng !== null && !isNaN(d.lat) && !isNaN(d.lng); });
-    if (donors.length > 0) {
-        var map = L.map('donor-map').setView([donors[0].lat, donors[0].lng], 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        donors.forEach(function(donor) {
-            var popupContent = `<b>${donor.name}</b><br>Blood Group: ${donor.bloodgroup}<br>Contact: ${donor.contact}<br>Location: ${donor.city}, ${donor.state}`;
-            L.marker([donor.lat, donor.lng]).addTo(map).bindPopup(popupContent);
-        });
-    } else {
-        document.getElementById('donor-map').style.display = 'none';
+{% extends 'donor/donorbase.html' %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    .search-card {
+        background: #fff;
+        border-radius: 2rem;
+        box-shadow: none;
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin-top: 3rem;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        transition: box-shadow 0.2s;
     }
+    .search-card:hover {
+        box-shadow: none;
+    }
+    .search-header {
+        background: #E53935;
+        color: #fff;
+        border-radius: 1.5rem 1.5rem 0 0;
+        padding: 1.5rem 1rem 1rem 1rem;
+        font-weight: 700;
+        font-size: 1.7rem;
+        text-align: center;
+        font-family: 'Poppins', 'Comic Sans MS', cursive, sans-serif;
+        letter-spacing: 1px;
+        box-shadow: none;
+        position: relative;
+    }
+    .search-header .cute-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.3rem;
+        display: block;
+        color: #fff;
+        text-shadow: none;
+    }
+    label {
+        color: #E53935;
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+        font-size: 1.05rem;
+    }
+    .form-group {
+        margin-bottom: 1.3rem;
+    }
+    .form-control {
+        border-radius: 1.2rem;
+        border: 1.5px solid #E53935;
+        padding: 0.7rem 1.1rem;
+        font-size: 1rem;
+        background: #fff;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        color: #222;
+        height: 48px;
+        line-height: 1.5;
+    }
+    select.form-control {
+        height: 48px;
+        padding-top: 0.7rem;
+        padding-bottom: 0.7rem;
+        line-height: 1.5;
+        background: #fff;
+        color: #222;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+    .form-control:focus {
+        border-color: #E53935;
+        box-shadow: 0 0 0 0.15rem rgba(229,57,53,0.13);
+        background: #fff;
+    }
+    .btn-primary {
+        background: #E53935 !important;
+        border: none;
+        color: #fff !important;
+        border-radius: 1.2rem;
+        font-weight: 700;
+        padding: 0.7rem 2.2rem;
+        font-size: 1.1rem;
+        box-shadow: none;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        margin-top: 0.5rem;
+    }
+    .btn-primary:hover {
+        background: #D32F2F !important;
+        color: #fff !important;
+        box-shadow: none;
+        transform: translateY(-2px) scale(1.04);
+    }
+</style>
+<div class="search-card mx-auto">
+    <div class="search-header">
+        <span class="cute-icon">🔍</span>
+        Search Donor
+    </div>
+    <form method="get">
+        <div class="form-group">
+            <label for="id_bloodgroup">Blood Group</label>
+            <select name="bloodgroup" id="id_bloodgroup" class="form-control">
+                <option value="">Select blood group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="id_city">Location <span style="color:#FF3B30;">*</span></label>
+            <input type="text" name="city" id="id_city" class="form-control" placeholder="Enter location (required)" required />
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    {% if donors %}
+    <div class="mt-4">
+        <table class="table table-bordered table-hover">
+            <thead style="background:#FF6F61;color:#fff;">
+                <tr>
+                    <th>Name</th>
+                    <th>Blood Group</th>
+                    <th>Location</th>
+                    <th>Contact</th>
+                    <th>Distance (km)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donor in donors %}
+                <tr>
+                    <td>{{ donor.user.first_name }} {{ donor.user.last_name }}</td>
+                    <td>{{ donor.blood_group }}</td>
+                    <td>{{ donor.city }}</td>
+                    <td>
+                      {% if donor.phone %}
+                        {{ donor.phone }}
+                      {% else %}
+                        {{ donor.user.email }}
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if donor.distance is not None %}
+                        {{ donor.distance|floatformat:2 }}
+                      {% else %}
+                        N/A
+                      {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-danger">No donors found for your search.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+{% if show_all %}
+  <div class="alert alert-warning text-center mt-3">No donors found in your area. Showing all matching blood group donors.</div>
+{% endif %}
+
+{% if search_coords %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<div id="map" style="height: 350px; width: 100%; margin-bottom: 2rem; border-radius: 1rem;"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  var map = L.map('map').setView([{{ search_coords.0 }}, {{ search_coords.1 }}], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+  // Search location marker
+  L.marker([{{ search_coords.0 }}, {{ search_coords.1 }}]).addTo(map)
+    .bindPopup('Search Location').openPopup();
+  // Donor markers from JSON
+  var donorMarkers = {{ donor_markers|safe }};
+  donorMarkers.forEach(function(d) {
+    L.marker([d.lat, d.lng]).addTo(map)
+      .bindPopup(d.name + '<br>' + d.city);
+  });
 </script>
 {% endif %}
-</body>
-</html> 
+</div>
+{% endblock content %} 

@@ -19,7 +19,7 @@
         <tbody>
             {% for t in donors %}
             <tr>
-                <td> {{t.get_name}}</td>
+                <td>{{ t.user.first_name }} {{ t.user.last_name }}</td>
                 <td>
                     {% if t.profile_pic %}
                         <img src="{{ t.profile_pic.url }}" alt="Profile Pic" height="40px" width="40px" />
@@ -27,13 +27,11 @@
                         <img src="/static/image/default_profile.png" alt="Default Profile Pic" height="40px" width="40px" />
                     {% endif %}
                 </td>
-                <td>{{t.bloodgroup}}</td>
-                <td>{{t.address}}</td>
-                <td>{{t.mobile}}</td>
-                
+                <td>{{ t.blood_group }}</td>
+                <td>{{ t.city }}</td>
+                <td>{{ t.phone }}</td>
                 <td class="text-right">
-                    {# <button class="btn btn-primary badge-pill" style="width: 80px;"><a  style="text-decoration: none;color: white;" href="{% url 'update-donor' t.id  %}">EDIT</a> </button> #}
-                    <button class="btn btn-danger badge-pill" style="width: 80px;"><a  style="text-decoration: none;color: white;" href="{% url 'delete-donor' t.id  %}">DELETE</a> </button>
+                    <!-- Optionally add edit/delete actions for Profile -->
                 </td>
             </tr>
             {% endfor %}

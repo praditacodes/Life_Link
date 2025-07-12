@@ -5,94 +5,105 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
 <style>
-    .history-header {
-        background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
+    body { background: #FFF5F5; }
+    .myrequest-card {
+        background: #fff;
+        border-radius: 2rem;
+        box-shadow: 0 8px 32px rgba(255,111,97,0.12);
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin-top: 3rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        transition: box-shadow 0.2s;
+    }
+    .myrequest-card:hover {
+        box-shadow: 0 12px 40px rgba(255,111,97,0.18);
+    }
+    .myrequest-header {
+        background: linear-gradient(90deg, #FF6F61 0%, #FF3B30 100%);
         color: #fff;
-        border-radius: 1rem 1rem 0 0;
-        padding: 2rem 2rem 1rem 2rem;
+        border-radius: 1.5rem 1.5rem 0 0;
+        padding: 1.5rem 1rem 1rem 1rem;
+        font-weight: 700;
+        font-size: 1.7rem;
         text-align: center;
         margin-bottom: 2rem;
+        font-family: 'Poppins', 'Comic Sans MS', cursive, sans-serif;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 8px rgba(255,111,97,0.08);
+        position: relative;
     }
-    .history-card {
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-        border-radius: 1rem;
+    .myrequest-header .cute-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.3rem;
+        display: block;
+        color: #fffbe7;
+        text-shadow: 0 2px 8px #FF3B30;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
         background: #fff;
-        padding: 2rem 1.5rem;
-        margin-bottom: 2rem;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(255,111,97,0.04);
     }
-    .table thead th {
-        background: #e52d27;
+    thead {
+        background: #FF6F61;
         color: #fff;
-        border: none;
+    }
+    th, td {
+        padding: 0.75rem 1rem;
+        text-align: center;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    th {
+        font-weight: 600;
+        letter-spacing: 0.5px;
     }
     .status-badge {
-        padding: 0.5em 1.2em;
-        border-radius: 2rem;
+        display: inline-block;
+        padding: 0.4em 1.2em;
+        border-radius: 1rem;
         font-size: 1em;
         font-weight: 600;
         color: #fff;
-        display: inline-block;
-    }
-    .status-approved {
-        background: #28a745;
-    }
-    .status-rejected {
-        background: #dc3545;
-    }
-    .status-pending {
-        background: #ffc107;
-        color: #333;
-    }
-    .table td, .table th {
-        vertical-align: middle;
+        background: #FF3B30;
     }
 </style>
-<div class="history-header">
-    <h2 class="mb-1"><i class="fas fa-history mr-2"></i>My Blood Request History</h2>
-    <p class="mb-0">View all your blood requests and their current status.</p>
-</div>
+
 <div class="container">
-    <div class="history-card">
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th><i class="fas fa-user"></i> Patient Name</th>
-                        <th><i class="fas fa-birthday-cake"></i> Age</th>
-                        <th><i class="fas fa-info-circle"></i> Reason</th>
-                        <th><i class="fas fa-tint"></i> Blood Group</th>
-                        <th><i class="fas fa-vial"></i> Unit</th>
-                        <th><i class="fas fa-calendar-alt"></i> Date</th>
-                        <th><i class="fas fa-flag"></i> Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for t in blood_request %}
-                    <tr>
-                        <td>{{ t.patient_name }}</td>
-                        <td>{{ t.patient_age }}</td>
-                        <td>{{ t.reason }}</td>
-                        <td>{{ t.bloodgroup }}</td>
-                        <td>{{ t.unit }}</td>
-                        <td>{{ t.date }}</td>
-                        <td>
-                            {% if t.status == 'Approved' %}
-                                <span class="status-badge status-approved"><i class="fas fa-check-circle"></i> Approved</span>
-                            {% elif t.status == 'Rejected' %}
-                                <span class="status-badge status-rejected"><i class="fas fa-times-circle"></i> Rejected</span>
-                            {% else %}
-                                <span class="status-badge status-pending"><i class="fas fa-hourglass-half"></i> Pending</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-center">No blood requests found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="myrequest-card mx-auto">
+        <div class="myrequest-header">
+            <span class="cute-icon">📝</span>
+            My Requests
         </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Blood Group</th>
+                    <th>Unit</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in blood_request %}
+                <tr>
+                    <td>{{ request.blood_group }}</td>
+                    <td>{{ request.unit }}</td>
+                    <td>{{ request.date|date:'F d, Y' }}</td>
+                    <td><span class="status-badge">{{ request.status }}</span></td>
+                    <td>{% if request.action %}{{ request.action }}{% else %}-{% endif %}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5">No requests found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock content %}

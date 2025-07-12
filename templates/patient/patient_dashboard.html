@@ -3,125 +3,194 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
 <style>
-    .dashboard-header {
-        background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
-        color: #fff;
-        border-radius: 1rem 1rem 0 0;
-        padding: 2rem 2rem 1rem 2rem;
-        text-align: center;
-        margin-bottom: 2rem;
+    body {
+        background: linear-gradient(120deg, #FFF5F5 0%, #FFC1CC 100%);
+        color: #C62828;
     }
-    .stat-card {
-        border-radius: 1rem;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    .dashboard-cute-card {
         background: #fff;
-        padding: 2.2rem 1.2rem 2.2rem 1.2rem;
+        border-radius: 2rem;
+        box-shadow: 0 8px 32px rgba(255,111,97,0.12);
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin-top: 2.5rem;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        transition: box-shadow 0.2s, transform 0.15s;
+        animation: popIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .dashboard-cute-card:hover {
+        box-shadow: 0 16px 48px rgba(255,111,97,0.18);
+        transform: translateY(-4px) scale(1.02);
+    }
+    @keyframes popIn {
+        0% { transform: scale(0.95); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .dashboard-cute-header {
+        background: linear-gradient(90deg, #FFC1CC 0%, #FF6F61 100%);
+        color: #d6336c;
+        border-radius: 2rem 2rem 0 0;
+        padding: 2rem 1rem 1.2rem 1rem;
+        font-weight: 700;
+        font-size: 2rem;
         text-align: center;
-        margin-bottom: 2.5rem;
-        transition: box-shadow 0.2s;
+        font-family: 'Poppins', 'Comic Sans MS', cursive, sans-serif;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 8px rgba(255,111,97,0.08);
+        position: relative;
     }
-    .stat-card:hover {
-        box-shadow: 0 8px 32px rgba(229,45,39,0.15);
-    }
-    .stat-icon {
+    .dashboard-cute-header .cute-emoji {
         font-size: 2.5rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.3rem;
+        display: block;
+        animation: bounce 1.2s infinite alternate;
     }
-    .stat-title {
+    @keyframes bounce {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-8px); }
+    }
+    .dashboard-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #FFC1CC 60%, #FFB6C1 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 24px #FFC1CC22;
+        margin: 0 auto 12px auto;
+        border: 3px solid #FFB6C1;
+        font-size: 2.7rem;
+        color: #fff;
+    }
+    .dashboard-welcome {
+        text-align: center;
+        font-size: 1.25rem;
+        color: #d6336c;
+        margin-bottom: 2.2rem;
+        margin-top: 0.5rem;
+        font-family: 'Poppins', 'Comic Sans MS', cursive, sans-serif;
+    }
+    .stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
+        margin-top: 10px;
+    }
+    .stat-cute-card {
+        background: #FFF5F5;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 24px 0 #FFC1CC15;
+        border: 1.5px solid #FFC1CC;
+        min-width: 170px;
+        max-width: 220px;
+        flex: 1 1 170px;
+        padding: 32px 18px 24px 18px;
+        text-align: center;
+        transition: transform 0.18s, box-shadow 0.18s;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    .stat-cute-card:hover {
+        transform: translateY(-6px) scale(1.04);
+        box-shadow: 0 8px 32px 0 #FFC1CC33;
+    }
+    .stat-cute-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        color: #FF6F61;
+        background: #fff;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px auto;
+        box-shadow: 0 2px 8px #FFC1CC22;
+    }
+    .stat-cute-title {
         font-size: 1.1rem;
-        color: #b31217;
+        color: #d6336c;
         font-weight: 600;
         margin-bottom: 0.25rem;
     }
-    .stat-value {
-        font-size: 2.2rem;
-        font-weight: bold;
-        color: #e52d27;
+    .stat-cute-value {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #FF3B30;
     }
-    .cta-btn {
-        background: linear-gradient(90deg, #e52d27 0%, #b31217 100%);
+    .cute-cta-btn {
+        background: linear-gradient(90deg, #FF6F61 0%, #FFC1CC 100%);
         color: #fff;
-        font-weight: 600;
+        font-weight: 700;
         border: none;
         border-radius: 2rem;
-        padding: 0.85rem 2.7rem;
-        font-size: 1.1rem;
+        padding: 0.95rem 2.7rem;
+        font-size: 1.15rem;
         margin-top: 2.5rem;
-        transition: background 0.2s;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(255,111,97,0.10);
     }
-    .cta-btn:hover {
-        background: linear-gradient(90deg, #b31217 0%, #e52d27 100%);
+    .cute-cta-btn:hover {
+        background: linear-gradient(90deg, #FFC1CC 0%, #FF6F61 100%);
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(255,111,97,0.16);
     }
-    .welcome-msg {
-        font-size: 1.2rem;
-        color: #444;
-        margin-bottom: 2.5rem;
-        margin-top: 1.5rem;
-        text-align: center;
+    @media (max-width: 900px) {
+        .stats-row { gap: 12px; }
+        .stat-cute-card { min-width: 120px; padding: 22px 8px 16px 8px; }
     }
-    .container-fluid {
-        padding-top: 40px;
-        padding-bottom: 40px;
-    }
-    @media (max-width: 767px) {
-        .container-fluid {
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
-        .stat-card {
-            margin-bottom: 1.5rem;
-            padding: 1.2rem 0.7rem 1.2rem 0.7rem;
-        }
-        .welcome-msg {
-            margin-bottom: 1.5rem;
-            margin-top: 1rem;
-        }
+    @media (max-width: 600px) {
+        .dashboard-cute-header { font-size: 1.3rem; padding: 1.2rem 0.5rem 0.7rem 0.5rem; }
+        .dashboard-cute-card { padding: 1.2rem 0.5rem 1.2rem 0.5rem; }
+        .stats-row { flex-direction: column; gap: 12px; }
+        .stat-cute-card { min-width: 0; max-width: 100%; }
     }
 </style>
-<!-- {#
-<div class="dashboard-header">
-    
-    <p class="mb-0">Track your blood requests, view status, and connect with donors easily.</p>
-</div>
-#} -->
-<h2>Welcome, {{ user.first_name }}!</h2>
-<p>Track your blood requests, view status, and connect with donors easily.</p>
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-3 col-6">
-            <div class="stat-card">
-                <div class="stat-icon text-primary"><i class="fas fa-sync-alt"></i></div>
-                <div class="stat-title">Requests Made</div>
-                <div class="stat-value">{{ requestmade }}</div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="stat-card">
-                <div class="stat-icon text-warning"><i class="fas fa-hourglass-half"></i></div>
-                <div class="stat-title">Pending Requests</div>
-                <div class="stat-value">{{ requestpending }}</div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="stat-card">
-                <div class="stat-icon text-success"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-title">Approved Requests</div>
-                <div class="stat-value">{{ requestapproved }}</div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="stat-card">
-                <div class="stat-icon text-danger"><i class="fas fa-times-circle"></i></div>
-                <div class="stat-title">Rejected Requests</div>
-                <div class="stat-value">{{ requestrejected }}</div>
-            </div>
-        </div>
+<div class="dashboard-cute-card">
+    <div class="dashboard-cute-header">
+        <span class="cute-emoji">🩷</span>
+        Welcome, {{ user.first_name }}!
     </div>
-    <div class="welcome-msg">
-        Need blood urgently? Search for available donors in your area.
+    <div class="dashboard-avatar">
+        {% if user.profile.profile_pic %}
+            <img src="{{ user.profile.profile_pic.url }}" alt="Profile" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #FFC1CC;">
+        {% else %}
+            <i class="fas fa-user"></i>
+        {% endif %}
+    </div>
+    <div class="dashboard-welcome">
+        <span style="font-size:1.1em;">Track your blood requests, view status, and connect with donors easily.<br>We're here to help you stay healthy and happy! <span style="font-size:1.3em;">😊</span></span>
+    </div>
+    <div class="stats-row">
+        <div class="stat-cute-card">
+            <div class="stat-cute-icon"><i class="fas fa-sync-alt"></i></div>
+            <div class="stat-cute-title">Requests Made</div>
+            <div class="stat-cute-value">{{ requestmade }}</div>
+        </div>
+        <div class="stat-cute-card">
+            <div class="stat-cute-icon"><i class="fas fa-hourglass-half"></i></div>
+            <div class="stat-cute-title">Pending</div>
+            <div class="stat-cute-value">{{ requestpending }}</div>
+        </div>
+        <div class="stat-cute-card">
+            <div class="stat-cute-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-cute-title">Approved</div>
+            <div class="stat-cute-value">{{ requestapproved }}</div>
+        </div>
+        <div class="stat-cute-card">
+            <div class="stat-cute-icon"><i class="fas fa-times-circle"></i></div>
+            <div class="stat-cute-title">Rejected</div>
+            <div class="stat-cute-value">{{ requestrejected }}</div>
+        </div>
     </div>
     <div class="text-center">
-        <a href="{% url 'search-donors' %}" class="cta-btn"><i class="fas fa-search mr-2"></i>Search Donor</a>
+        <a href="{% url 'search-donors' %}" class="cute-cta-btn"><i class="fas fa-search mr-2"></i>Search Donor</a>
     </div>
 </div>
 {% endblock content %}

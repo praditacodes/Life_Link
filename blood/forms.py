@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -13,7 +14,7 @@ class BloodForm(forms.ModelForm):
 class RequestForm(forms.ModelForm):
     class Meta:
         model=models.BloodRequest
-        fields=['patient_name','patient_age','reason','bloodgroup','unit']
+        fields=['patient_name','patient_age','reason','blood_group','unit']
 
 class OTPVerificationForm(forms.Form):
     otp = forms.CharField(max_length=6, min_length=6, widget=forms.TextInput(attrs={'class': 'input--style-5'}))
@@ -50,3 +51,8 @@ class ChangePasswordForm(forms.Form):
         if new_password and confirm_password and new_password != confirm_password:
             raise forms.ValidationError("Passwords don't match")
         return cleaned_data
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = CustomUser
+        fields = ("username", "first_name", "last_name", "email")

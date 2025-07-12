@@ -23,51 +23,44 @@ from phonenumber_field.phonenumber import to_python
 from django.db.models import Count, Max
 from django.db.models.functions import TruncMonth
 import json
+from accounts.models import Profile
 
 
 def logout_view(request):
+    from django.contrib.auth import logout
     logout(request)
-    return redirect('')
+    return redirect('home')
 
 def home_view(request):
-    x=models.Stock.objects.all()
+    x = models.Stock.objects.all()
     print(x)
-    if len(x)==0:
-        blood1=models.Stock()
-        blood1.bloodgroup="A+"
+    if len(x) == 0:
+        blood1 = models.Stock()
+        blood1.bloodgroup = "A+"
         blood1.save()
-
-        blood2=models.Stock()
-        blood2.bloodgroup="A-"
+        blood2 = models.Stock()
+        blood2.bloodgroup = "A-"
         blood2.save()
-
-        blood3=models.Stock()
-        blood3.bloodgroup="B+"
-        blood3.save()        
-
-        blood4=models.Stock()
-        blood4.bloodgroup="B-"
+        blood3 = models.Stock()
+        blood3.bloodgroup = "B+"
+        blood3.save()
+        blood4 = models.Stock()
+        blood4.bloodgroup = "B-"
         blood4.save()
-
-        blood5=models.Stock()
-        blood5.bloodgroup="AB+"
+        blood5 = models.Stock()
+        blood5.bloodgroup = "AB+"
         blood5.save()
-
-        blood6=models.Stock()
-        blood6.bloodgroup="AB-"
+        blood6 = models.Stock()
+        blood6.bloodgroup = "AB-"
         blood6.save()
-
-        blood7=models.Stock()
-        blood7.bloodgroup="O+"
+        blood7 = models.Stock()
+        blood7.bloodgroup = "O+"
         blood7.save()
-
-        blood8=models.Stock()
-        blood8.bloodgroup="O-"
+        blood8 = models.Stock()
+        blood8.bloodgroup = "O-"
         blood8.save()
-
-    if request.user.is_authenticated:
-        return HttpResponseRedirect('afterlogin')  
-    return render(request,'blood/index.html')
+    # Always show landing page, even for logged-in users
+    return render(request, 'blood/index.html')
 
 def is_donor(user):
     return user.groups.filter(name='DONOR').exists()
@@ -77,13 +70,7 @@ def is_patient(user):
 
 
 def afterlogin_view(request):
-    if is_donor(request.user):      
-        return redirect('donor/donor-dashboard')
-                
-    elif is_patient(request.user):
-        return redirect('patient/patient-dashboard')
-    else:
-        return redirect('admin-dashboard')
+    return redirect('user-dashboard')
 
 @login_required(login_url='adminlogin')
 def admin_dashboard_view(request):
@@ -94,7 +81,7 @@ def admin_dashboard_view(request):
     # Top donors (by total units donated)
     top_donors = (
         dmodels.BloodDonate.objects.filter(status='Approved')
-        .values('donor__user__first_name', 'donor__user__last_name', 'donor__bloodgroup')
+        .values('donor__user__first_name', 'donor__user__last_name', 'donor__blood_group')
         .annotate(total_units=Sum('unit'), donation_count=Count('id'), last_donation=Max('date'))
         .order_by('-total_units')[:5]
     )
@@ -118,14 +105,14 @@ def admin_dashboard_view(request):
     bg_labels = [d['bloodgroup'] for d in bloodgroup_dist]
     bg_data = [d['total'] for d in bloodgroup_dist]
     dict = {
-        'A1': models.Stock.objects.get(bloodgroup="A+"),
-        'A2': models.Stock.objects.get(bloodgroup="A-"),
-        'B1': models.Stock.objects.get(bloodgroup="B+"),
-        'B2': models.Stock.objects.get(bloodgroup="B-"),
-        'AB1': models.Stock.objects.get(bloodgroup="AB+"),
-        'AB2': models.Stock.objects.get(bloodgroup="AB-"),
-        'O1': models.Stock.objects.get(bloodgroup="O+"),
-        'O2': models.Stock.objects.get(bloodgroup="O-"),
+        'A1': models.Stock.objects.get_or_create(bloodgroup="A+")[0],
+        'A2': models.Stock.objects.get_or_create(bloodgroup="A-")[0],
+        'B1': models.Stock.objects.get_or_create(bloodgroup="B+")[0],
+        'B2': models.Stock.objects.get_or_create(bloodgroup="B-")[0],
+        'AB1': models.Stock.objects.get_or_create(bloodgroup="AB+")[0],
+        'AB2': models.Stock.objects.get_or_create(bloodgroup="AB-")[0],
+        'O1': models.Stock.objects.get_or_create(bloodgroup="O+")[0],
+        'O2': models.Stock.objects.get_or_create(bloodgroup="O-")[0],
         'totaldonors': dmodels.Donor.objects.all().count(),
         'totalbloodunit': totalunit['unit__sum'],
         'totalrequest': models.BloodRequest.objects.all().count(),
@@ -144,14 +131,14 @@ def admin_dashboard_view(request):
 def admin_blood_view(request):
     dict={
         'bloodForm':forms.BloodForm(),
-        'A1':models.Stock.objects.get(bloodgroup="A+"),
-        'A2':models.Stock.objects.get(bloodgroup="A-"),
-        'B1':models.Stock.objects.get(bloodgroup="B+"),
-        'B2':models.Stock.objects.get(bloodgroup="B-"),
-        'AB1':models.Stock.objects.get(bloodgroup="AB+"),
-        'AB2':models.Stock.objects.get(bloodgroup="AB-"),
-        'O1':models.Stock.objects.get(bloodgroup="O+"),
-        'O2':models.Stock.objects.get(bloodgroup="O-"),
+        'A1':models.Stock.objects.get_or_create(bloodgroup="A+")[0],
+        'A2':models.Stock.objects.get_or_create(bloodgroup="A-")[0],
+        'B1':models.Stock.objects.get_or_create(bloodgroup="B+")[0],
+        'B2':models.Stock.objects.get_or_create(bloodgroup="B-")[0],
+        'AB1':models.Stock.objects.get_or_create(bloodgroup="AB+")[0],
+        'AB2':models.Stock.objects.get_or_create(bloodgroup="AB-")[0],
+        'O1':models.Stock.objects.get_or_create(bloodgroup="O+")[0],
+        'O2':models.Stock.objects.get_or_create(bloodgroup="O-")[0],
     }
     if request.method=='POST':
         bloodForm=forms.BloodForm(request.POST)
@@ -166,8 +153,9 @@ def admin_blood_view(request):
 
 @login_required(login_url='adminlogin')
 def admin_donor_view(request):
-    donors=dmodels.Donor.objects.all()
-    return render(request,'blood/admin_donor.html',{'donors':donors})
+    from accounts.models import Profile
+    donors = Profile.objects.filter(can_donate=True)
+    return render(request, 'blood/admin_donor.html', {'donors': donors})
 
 @login_required(login_url='adminlogin')
 def update_donor_view(request,pk):
@@ -201,8 +189,9 @@ def delete_donor_view(request,pk):
 
 @login_required(login_url='adminlogin')
 def admin_patient_view(request):
-    patients=pmodels.Patient.objects.all()
-    return render(request,'blood/admin_patient.html',{'patients':patients})
+    from accounts.models import Profile
+    patients = Profile.objects.filter(can_receive=True)
+    return render(request, 'blood/admin_patient.html', {'patients': patients})
 
 
 @login_required(login_url='adminlogin')
@@ -254,7 +243,7 @@ def admin_donation_view(request):
 def update_approve_status_view(request,pk):
     req=models.BloodRequest.objects.get(id=pk)
     message=None
-    bloodgroup=req.bloodgroup
+    bloodgroup=req.blood_group
     unit=req.unit
     stock=models.Stock.objects.get(bloodgroup=bloodgroup)
     if stock.unit > unit:
@@ -300,41 +289,69 @@ def reject_donation_view(request,pk):
     return HttpResponseRedirect('/admin-donation')
 
 @login_required
-@user_passes_test(is_patient)
+@user_passes_test(lambda u: u.is_authenticated)
 def search_donors_view(request):
+    from geopy.geocoders import Nominatim
+    from geopy.distance import geodesic
+    from django.db.models import Q
     donors = []
+    search_coords = None
+    show_all = False
+    donor_markers = []
     if request.method == 'GET':
         bloodgroup = request.GET.get('bloodgroup')
         city = request.GET.get('city')
-        radius = request.GET.get('radius', 10)  # Default 10km radius
-
-        if bloodgroup and city:
-            # Get coordinates for the search city
-            geolocator = Nominatim(user_agent="blood_link")
-            try:
-                location = geolocator.geocode(city)
-                if location:
-                    search_coords = (location.latitude, location.longitude)
-                    
-                    # Get all donors with matching blood group
-                    donor_list = dmodels.Donor.objects.filter(bloodgroup=bloodgroup)
-                    
-                    # Calculate distance for each donor
-                    for donor in donor_list:
-                        if donor.latitude and donor.longitude:
-                            donor_coords = (float(donor.latitude), float(donor.longitude))
-                            distance = geodesic(search_coords, donor_coords).kilometers
-                            
-                            if distance <= float(radius):
+        radius = request.GET.get('radius', 10)
+        if bloodgroup:
+            all_donors = Profile.objects.filter(blood_group=bloodgroup, can_donate=True)
+            local_donors = []
+            far_donors = []
+            donor_set = set()
+            if city:
+                geolocator = Nominatim(user_agent="blood_link")
+                try:
+                    location = geolocator.geocode(city)
+                    if location:
+                        search_coords = (location.latitude, location.longitude)
+                        for donor in all_donors:
+                            if donor.latitude and donor.longitude:
+                                donor_coords = (float(donor.latitude), float(donor.longitude))
+                                distance = geodesic(search_coords, donor_coords).kilometers
                                 donor.distance = distance
-                                donors.append(donor)
-                    
-                    # Sort donors by distance
-                    donors.sort(key=lambda x: x.distance)
-            except Exception as e:
-                print(f"Error in geocoding: {e}")
-
-    return render(request, 'blood/search.html', {'donors': donors})
+                                if distance <= float(radius):
+                                    local_donors.append(donor)
+                                    donor_set.add(donor.pk)
+                                else:
+                                    far_donors.append(donor)
+                            else:
+                                far_donors.append(donor)
+                except Exception as e:
+                    print(f"Error in geocoding: {e}")
+            else:
+                far_donors = list(all_donors)
+            # If no local donors, show all
+            if not local_donors:
+                show_all = True
+                donors = far_donors
+            else:
+                donors = local_donors + [d for d in far_donors if d.pk not in donor_set]
+            # Sort by distance if available, else by city
+            donors.sort(key=lambda x: (getattr(x, 'distance', None) if hasattr(x, 'distance') and x.distance is not None else 99999, x.city or ''))
+            # Prepare donor_markers for map
+            for donor in donors:
+                if donor.latitude and donor.longitude:
+                    donor_markers.append({
+                        'lat': float(donor.latitude),
+                        'lng': float(donor.longitude),
+                        'name': f"{donor.user.first_name} {donor.user.last_name}",
+                        'city': donor.city or ''
+                    })
+    return render(request, 'blood/search.html', {
+        'donors': donors,
+        'search_coords': search_coords,
+        'show_all': show_all,
+        'donor_markers': json.dumps(donor_markers)
+    })
 
 def verify_email(request):
     if request.method == 'POST':

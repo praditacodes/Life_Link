@@ -67,7 +67,7 @@ class DonorForm(forms.ModelForm):
 class DonationForm(forms.ModelForm):
     class Meta:
         model=models.BloodDonate
-        fields=['age','bloodgroup','cause','unit']
+        fields=['age','bloodgroup','diseases','unit']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

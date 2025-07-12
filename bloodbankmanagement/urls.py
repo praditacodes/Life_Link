@@ -17,15 +17,20 @@ from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth.views import LoginView
 from blood import views
+from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     
     path('donor/',include('donor.urls')),
     path('patient/',include('patient.urls')),
+    path('accounts/', include('accounts.urls')),
 
     
-    path('',views.home_view,name=''),
+    path('', TemplateView.as_view(template_name='blood/index.html'), name='home'),
     path('logout/', views.logout_view, name='logout'),
     path('search-donors/', views.search_donors_view, name='search-donors'),
 
@@ -53,3 +58,6 @@ urlpatterns = [
     path('reset-password/', views.reset_password, name='reset_password'),
     path('change-password/', views.change_password, name='change_password'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

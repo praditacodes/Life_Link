@@ -13,7 +13,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
         body {
             min-height: 100vh;
-            background: url("{% static 'image/blood_bg.jpg' %}") no-repeat center center/cover;
+            background: linear-gradient(135deg, #FFC1CC 0%, #FFB6C1 100%);
             display: flex; justify-content: center; align-items: center;
         }
         .glass-card {
@@ -32,12 +32,37 @@
         .form-control {
             width: 100%; padding: 10px 15px; border: none; border-radius: 8px; margin-bottom: 15px;
         }
-        .btn-custom {
-            background-color: #f44336; color: white; width: 100%; border: none; padding: 10px; border-radius: 8px;
+        .btn-primary, .btn--radius-2, .btn-custom {
+            background-color: #FFC1CC !important;
+            color: #d6336c !important;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
         }
-        .btn-custom:hover { background-color: #d32f2f; }
-        .redirect-link { text-align: center; margin-top: 15px; color: white; }
-        .alert { color: white; background-color: rgba(244, 67, 54, 0.8); padding: 10px; border-radius: 8px; margin-bottom: 15px; }
+        .btn-primary:hover, .btn--radius-2:hover, .btn-custom:hover {
+            background-color: #FFB6C1 !important;
+            color: #fff !important;
+        }
+        .redirect-link {
+            text-align: center;
+            margin-top: 15px;
+            color: #d6336c;
+        }
+        .alert {
+            color: #fff;
+            background-color: #FFC1CC;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        a, a:visited {
+            color: #d6336c;
+        }
+        a:hover {
+            color: #FFB6C1;
+        }
     </style>
 </head>
 <body>

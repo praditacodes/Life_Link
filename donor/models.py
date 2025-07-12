@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from accounts.models import Profile
 
 class Donor(models.Model):
     BLOOD_GROUP_CHOICES = [
@@ -32,12 +33,12 @@ class Donor(models.Model):
         return self.user.first_name
 
 class BloodDonate(models.Model): 
-    donor=models.ForeignKey(Donor,on_delete=models.CASCADE)   
-    cause=models.CharField(max_length=100,blank=True,default="")
-    age=models.PositiveIntegerField()
-    bloodgroup=models.CharField(max_length=10)
-    unit=models.PositiveIntegerField(default=0)
-    status=models.CharField(max_length=20,default="Pending")
-    date=models.DateField(auto_now=True)
+    donor = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    diseases = models.CharField(max_length=100, blank=True, default="")
+    age = models.PositiveIntegerField()
+    bloodgroup = models.CharField(max_length=10)
+    unit = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=20, default="Pending")
+    date = models.DateField(auto_now=True)
     def __str__(self):
-        return self.donor
+        return str(self.donor)

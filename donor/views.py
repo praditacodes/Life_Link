@@ -19,7 +19,9 @@ from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 from django.db import IntegrityError
 from django.contrib import messages
+from accounts.models import Profile
 
+# DEPRECATED: Use accounts.register_view instead
 def donor_signup_view(request):
     userForm = forms.DonorUserForm()
     donorForm = forms.DonorForm()
@@ -61,41 +63,41 @@ def donor_signup_view(request):
 
 
 def donor_dashboard_view(request):
-    donor= models.Donor.objects.get(user_id=request.user.id)
-    dict={
-        'requestpending': models.BloodDonate.objects.filter(donor=donor, status='Pending').count(),
-        'requestapproved': models.BloodDonate.objects.filter(donor=donor, status='Approved').count(),
-        'requestmade': models.BloodDonate.objects.filter(donor=donor).count(),
-        'requestrejected': models.BloodDonate.objects.filter(donor=donor, status='Rejected').count(),
+    profile = Profile.objects.get(user=request.user)
+    dict = {
+        'requestpending': models.BloodDonate.objects.filter(donor=profile, status='Pending').count(),
+        'requestapproved': models.BloodDonate.objects.filter(donor=profile, status='Approved').count(),
+        'requestmade': models.BloodDonate.objects.filter(donor=profile).count(),
+        'requestrejected': models.BloodDonate.objects.filter(donor=profile, status='Rejected').count(),
     }
-    return render(request,'donor/donor_dashboard.html',context=dict)
+    return render(request, 'donor/donor_dashboard.html', context=dict)
 
 
 def donate_blood_view(request):
-    donor = models.Donor.objects.get(user_id=request.user.id)
+    profile = Profile.objects.get(user=request.user)
     initial_data = {
-        'bloodgroup': donor.bloodgroup,
-        'age': getattr(donor, 'age', ''),
+        'bloodgroup': profile.blood_group,
+        'age': getattr(profile, 'age', ''),
     }
     donation_form = forms.DonationForm(initial=initial_data)
     if request.method == 'POST':
         donation_form = forms.DonationForm(request.POST)
         if donation_form.is_valid():
-            if donor.age is None or donor.age == '':
-                messages.error(request, 'Your age is not set. Please contact admin to update your profile before donating.')
+            if profile.age is None or profile.age == '':
+                messages.error(request, 'Your age is not set. Please update your profile before donating.')
                 return render(request, 'donor/donate_blood.html', {'donation_form': donation_form})
             blood_donate = donation_form.save(commit=False)
-            blood_donate.bloodgroup = donor.bloodgroup
-            blood_donate.age = donor.age
-            blood_donate.donor = donor
+            blood_donate.bloodgroup = profile.blood_group
+            blood_donate.age = profile.age
+            blood_donate.donor = profile
             blood_donate.save()
-            return HttpResponseRedirect('donation-history')  
+            return HttpResponseRedirect('donation-history')
     return render(request, 'donor/donate_blood.html', {'donation_form': donation_form})
 
 def donation_history_view(request):
-    donor= models.Donor.objects.get(user_id=request.user.id)
-    donations=models.BloodDonate.objects.all().filter(donor=donor)
-    return render(request,'donor/donation_history.html',{'donations':donations})
+    profile = Profile.objects.get(user=request.user)
+    donations = models.BloodDonate.objects.filter(donor=profile)
+    return render(request, 'donor/donation_history.html', {'donations': donations})
 
 def register_patient(request):
     # ... get data from form ...
@@ -106,18 +108,19 @@ def register_patient(request):
     )
 
 def search_donors_view(request):
+    from geopy.geocoders import Nominatim
+    from geopy.distance import geodesic
     donors = []
     if request.method == 'GET':
         bloodgroup = request.GET.get('bloodgroup')
         city = request.GET.get('city')
-        radius = request.GET.get('radius', 10)  # Default 10km radius
-
+        radius = request.GET.get('radius', 10)
         if bloodgroup and city:
             geolocator = Nominatim(user_agent="blood_link")
             location = geolocator.geocode(city)
             if location:
                 search_coords = (location.latitude, location.longitude)
-                donor_list = models.Donor.objects.filter(bloodgroup=bloodgroup)
+                donor_list = Profile.objects.filter(blood_group=bloodgroup, can_donate=True)
                 for donor in donor_list:
                     if donor.latitude and donor.longitude:
                         donor_coords = (float(donor.latitude), float(donor.longitude))
@@ -155,7 +158,7 @@ def download_certificate(request, donation_id):
     p.save()
     return response
 
-@login_required(login_url='donorlogin')
+# DEPRECATED: Use accounts.profile_update_view instead
 def donor_profile_view(request):
     donor = models.Donor.objects.get(user_id=request.user.id)
     if request.method == 'POST':

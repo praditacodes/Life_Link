@@ -1,0 +1,25 @@
+{% extends 'blood/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container mt-5" style="max-width: 400px;">
+    <div class="card shadow-lg">
+        <div class="card-header bg-danger text-white text-center">
+            <h2 class="mb-0"><i class="fas fa-key mr-2"></i>OTP Verification</h2>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+                <input type="hidden" name="step" value="otp">
+                {{ form.otp.label_tag }}
+                {% render_field form.otp %}
+                <button type="submit" class="btn btn-danger btn-block mt-3">Verify OTP</button>
+            </form>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 
