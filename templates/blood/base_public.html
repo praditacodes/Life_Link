@@ -2,39 +2,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life Link</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    <style>
-      body, html {
-        background: #fff !important;
-      }
-      main {
-        background: #fff !important;
-      }
-    </style>
-    {% block extra_head %}{% endblock %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Link</title>
+
+  <!-- Bootstrap & Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+
+  <!-- Inline Styling -->
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background: #fff !important;
+      scroll-behavior: smooth;
+    }
+
+    /* Add space so content doesn’t hide under navbar */
+    main {
+      background: #fff !important;
+      padding-top: 100px; /* ensures navbar doesn't overlap content */
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-bottom: 30px;
+      min-height: 100vh;
+    }
+
+    .navbar-brand {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 20px 0;
+      background-color: #f8f9fa;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background: #E53935; color: #fff;">
-        <a class="navbar-brand" href="/" style="color: #fff; font-weight: 700;"><i class="fas fa-heartbeat"></i> Life-link</a>
-        <div class="collapse navbar-collapse justify-content-end">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" style="color: #fff;" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" style="color: #fff;" href="/accounts/register/">Register</a></li>
-                <li class="nav-item"><a class="nav-link" style="color: #fff;" href="/accounts/login/">Login</a></li>
-                <li class="nav-item"><a class="nav-link" style="color: #fff;" href="/admin/">Admin</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-    {% include 'blood/footer.html' %}
-    {% block extra_scripts %}{% endblock %}
+
+  <!-- Navbar -->
+  {% include 'blood/navbar.html' %}
+
+  <!-- Main Page Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  {% include 'blood/footer.html' %}
+
+  <!-- Optional Extra Scripts -->
+  {% block extra_scripts %}{% endblock %}
+
+  <!-- Bootstrap Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
-</html> 
+</html>

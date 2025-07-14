@@ -85,12 +85,43 @@ def profile_update_view(request):
 @login_required
 def user_dashboard_view(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
-    # Add your dashboard logic here, e.g., stats, context, etc.
-    # If you want to show a different dashboard for superusers, you can add:
     if request.user.is_superuser:
         return render(request, 'blood/admin_dashboard.html')
-    # Otherwise, show the normal user dashboard
-    return render(request, 'accounts/dashboard.html', {'profile': profile})
+
+    # Fetch recent donations and requests
+    from donor.models import BloodDonate
+    from blood.models import BloodRequest
+    donations = BloodDonate.objects.filter(donor=profile).order_by('-date')[:5]
+    requests = BloodRequest.objects.filter(requested_by=profile).order_by('-date')[:5]
+    # Combine and sort by date
+    recent_activity = []
+    for d in donations:
+        recent_activity.append({
+            'type': 'Donation',
+            'blood_group': d.bloodgroup,
+            'unit': d.unit,
+            'date': d.date,
+            'status': d.status,
+        })
+    for r in requests:
+        recent_activity.append({
+            'type': 'Request',
+            'blood_group': r.blood_group,
+            'unit': r.unit,
+            'date': r.date,
+            'status': r.status,
+        })
+    # Sort all by date descending
+    recent_activity = sorted(recent_activity, key=lambda x: x['date'], reverse=True)[:5]
+    # Stats
+    donation_count = BloodDonate.objects.filter(donor=profile, status='Approved').count()
+    request_count = BloodRequest.objects.filter(requested_by=profile).count()
+    return render(request, 'accounts/dashboard.html', {
+        'profile': profile,
+        'recent_activity': recent_activity,
+        'donation_count': donation_count,
+        'request_count': request_count,
+    })
 
 def send_otp_via_email(user):
     otp = str(random.randint(100000, 999999))

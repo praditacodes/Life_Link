@@ -32,6 +32,8 @@ def logout_view(request):
     return redirect('home')
 
 def home_view(request):
+    if request.user.is_authenticated:
+        return redirect('user-dashboard')  # or the appropriate dashboard for the user
     x = models.Stock.objects.all()
     print(x)
     if len(x) == 0:
@@ -298,11 +300,18 @@ def search_donors_view(request):
     search_coords = None
     show_all = False
     donor_markers = []
+    blood_stock = None
     if request.method == 'GET':
         bloodgroup = request.GET.get('bloodgroup')
         city = request.GET.get('city')
         radius = request.GET.get('radius', 10)
         if bloodgroup:
+            # Fetch blood stock for the selected group
+            try:
+                stock_obj = models.Stock.objects.get(bloodgroup=bloodgroup)
+                blood_stock = stock_obj.unit
+            except models.Stock.DoesNotExist:
+                blood_stock = 0
             all_donors = Profile.objects.filter(blood_group=bloodgroup, can_donate=True)
             local_donors = []
             far_donors = []
@@ -350,7 +359,9 @@ def search_donors_view(request):
         'donors': donors,
         'search_coords': search_coords,
         'show_all': show_all,
-        'donor_markers': json.dumps(donor_markers)
+        'donor_markers': json.dumps(donor_markers),
+        'blood_stock': blood_stock,
+        'selected_bloodgroup': request.GET.get('bloodgroup', ''),
     })
 
 def verify_email(request):
@@ -466,7 +477,7 @@ def reset_password(request):
                 user.save()
                 del request.session['reset_email']
                 messages.success(request, 'Password reset successful! Please login with your new password.')
-                return redirect('patientlogin')
+                return redirect('login')
             except CustomUser.DoesNotExist:
                 messages.error(request, 'User not found')
     else:

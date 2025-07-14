@@ -797,9 +797,7 @@ body {
   border: 1px solid var(--border);
 }
 
-.navbar, .sidebar {
-  background: var(--primary) !important;
-}
+
 
 .btn-primary, .btn-danger {
   background: var(--primary) !important;
@@ -846,7 +844,7 @@ input, select, textarea {
 }
 
 /* Sidebar links */
-.sidebar ul li a {
+/* .sidebar ul li a {
   color: #fff !important;
   font-weight: 500;
   border-radius: 0.7rem;
@@ -858,7 +856,7 @@ input, select, textarea {
 .sidebar ul li a:hover, .sidebar ul li a.active {
   background: var(--secondary) !important;
   color: #fff !important;
-}
+} */
 
 /* Navbar brand */
 .navbar-brand {

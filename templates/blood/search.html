@@ -49,24 +49,25 @@
     .form-control {
         border-radius: 1.2rem;
         border: 1.5px solid #E53935;
-        padding: 0.7rem 1.1rem;
+        padding: 0.5rem 1.1rem; /* reduced vertical padding */
         font-size: 1rem;
         background: #fff;
         transition: border-color 0.2s, box-shadow 0.2s;
         color: #222;
         height: 48px;
         line-height: 1.5;
+        box-sizing: border-box;
     }
     select.form-control {
         height: 48px;
-        padding-top: 0.7rem;
-        padding-bottom: 0.7rem;
+        padding: 0.5rem 1.1rem; /* match input padding */
         line-height: 1.5;
         background: #fff;
         color: #222;
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
+        box-sizing: border-box;
     }
     .form-control:focus {
         border-color: #E53935;
@@ -102,14 +103,14 @@
             <label for="id_bloodgroup">Blood Group</label>
             <select name="bloodgroup" id="id_bloodgroup" class="form-control">
                 <option value="">Select blood group</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
+                <option value="A+" {% if selected_bloodgroup == 'A+' %}selected{% endif %}>A+</option>
+                <option value="A-" {% if selected_bloodgroup == 'A-' %}selected{% endif %}>A-</option>
+                <option value="B+" {% if selected_bloodgroup == 'B+' %}selected{% endif %}>B+</option>
+                <option value="B-" {% if selected_bloodgroup == 'B-' %}selected{% endif %}>B-</option>
+                <option value="AB+" {% if selected_bloodgroup == 'AB+' %}selected{% endif %}>AB+</option>
+                <option value="AB-" {% if selected_bloodgroup == 'AB-' %}selected{% endif %}>AB-</option>
+                <option value="O+" {% if selected_bloodgroup == 'O+' %}selected{% endif %}>O+</option>
+                <option value="O-" {% if selected_bloodgroup == 'O-' %}selected{% endif %}>O-</option>
             </select>
         </div>
         <div class="form-group">
@@ -120,6 +121,13 @@
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
     </form>
+
+    {% if selected_bloodgroup and blood_stock is not None %}
+    <div class="alert alert-info mt-4 text-center" style="font-size:1.1rem; font-weight:600;">
+        <i class="fas fa-tint"></i> Blood Bank Stock for <span style="color:#E53935;">{{ selected_bloodgroup }}</span>: <span style="color:#1976d2;">{{ blood_stock }}</span> unit(s)
+    </div>
+    {% endif %}
+
     {% if donors %}
     <div class="mt-4">
         <table class="table table-bordered table-hover">

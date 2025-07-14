@@ -155,7 +155,7 @@ EMAIL_RECEIVING_USER = ['support@bloodlink.com']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Phone number field settings
-PHONENUMBER_DEFAULT_REGION = 'IN'  # Change this to your country code
+PHONENUMBER_DEFAULT_REGION = 'NP'  # Nepal country code
 
 # Import local settings if present (for AUTH_USER_MODEL and other overrides)
 try:

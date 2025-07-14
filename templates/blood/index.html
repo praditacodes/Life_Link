@@ -1,77 +1,95 @@
 {% extends 'blood/base_public.html' %}
 {% block content %}
-<style>
-body, html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-.main-hero {
-  min-height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-  margin: 0;
-  padding: 0;
-}
-.hero-content {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 2rem 1rem 0 1rem;
-}
-.hero-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2.5rem;
-}
-.hero-card {
-  background: #fff;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 12px rgba(229,57,53,0.06);
-  padding: 2rem 1.5rem;
-  min-width: 260px;
-  max-width: 320px;
-  flex: 1 1 260px;
-  text-align: center;
-}
-@media (max-width: 900px) {
-  .hero-cards { flex-direction: column; gap: 1.5rem; }
-}
-</style>
-<div class="main-hero">
-  <div class="hero-content">
-    <h1 style="font-size:3rem;font-weight:700;color:#b71c1c;">Welcome to Life Link</h1>
-    <p style="font-size:1.2rem;color:#b71c1c;margin-top:1rem;">Connecting lives, saving lives.<br>
-      Life Link is a modern blood bank management system that makes it easy to donate, request, and search for blood. Join our community and help save lives today!</p>
-    <div style="margin:2rem 0;">
-      <a href="/accounts/register/" class="btn btn-danger" style="font-weight:600;font-size:1.1rem;margin-right:1rem;">REGISTER</a>
-      <a href="/accounts/login/" class="btn btn-outline-danger" style="font-weight:600;font-size:1.1rem;">LOGIN</a>
-    </div>
-    <div class="hero-cards">
-      <div class="hero-card">
-        <div style="font-size:2.5rem;color:#E53935;"><i class="fas fa-tint"></i></div>
-        <h3 style="margin-top:1rem;color:#E53935;">Donate Blood</h3>
-        <p>Become a hero by donating blood and saving lives in your community.</p>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .main-hero {
+      min-height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .hero-content {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 2rem 1rem 0 1rem;
+    }
+    .hero-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .hero-card {
+      background: #fff;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 12px rgba(229, 57, 53, 0.06);
+      padding: 2rem 1.5rem;
+      min-width: 260px;
+      max-width: 320px;
+      flex: 1 1 260px;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .hero-cards {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+  <div class="main-hero">
+    <div class="hero-content">
+      <h1 style="font-size:3rem;font-weight:700;color:#b71c1c;">Welcome to Life Link</h1>
+      <p style="font-size:1.2rem;color:#000000;margin-top:1rem;">
+        Connecting lives, saving lives.<br />
+        Life Link is a modern blood bank management system that makes it easy to donate, request, and search for blood. Join our community and help save lives today!
+      </p>
+      <div style="margin:2rem 0;">
+        <div style="display: flex; gap: 10px; padding: 10px;  justify-content: center;">
+          <div style="background-color: red; color: #ffffff; padding: 10px">
+            <a href="/accounts/register/" style="font-weight: 600; font-size: 1.1rem; margin-right: 1rem; color: white; text-decoration: none;">REGISTER</a>
+          </div>
+
+          <div style="background-color: red; color: #ffffff; padding: 10px">
+            <a href="/accounts/login/" style="font-weight: 600; font-size: 1.1rem; color: white; text-decoration: none;">LOGIN</a>
+          </div>
+        </div>
       </div>
-      <div class="hero-card">
-        <div style="font-size:2.5rem;color:#E53935;"><i class="fas fa-sync-alt"></i></div>
-        <h3 style="margin-top:1rem;color:#E53935;">Request Blood</h3>
-        <p>Need blood? Request any blood group and get help fast from our network.</p>
-      </div>
-      <div class="hero-card">
-        <div style="font-size:2.5rem;color:#E53935;"><i class="fas fa-search"></i></div>
-        <h3 style="margin-top:1rem;color:#E53935;">Search Donors</h3>
-        <p>Find available donors by blood group and location, anytime you need.</p>
+      <div class="hero-cards">
+        <div class="hero-card">
+          <div style="font-size:2.5rem;color:#E53935;">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h3 style="margin-top:1rem;color:#E53935;">Donate Blood</h3>
+          <p>Become a hero by donating blood and saving lives in your community.</p>
+        </div>
+        <div class="hero-card">
+          <div style="font-size:2.5rem;color:#E53935;">
+            <i class="fas fa-sync-alt"></i>
+          </div>
+          <h3 style="margin-top:1rem;color:#E53935;">Request Blood</h3>
+          <p>Need blood? Request any blood group and get help fast from our network.</p>
+        </div>
+        <div class="hero-card">
+          <div style="font-size:2.5rem;color:#E53935;">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3 style="margin-top:1rem;color:#E53935;">Search Donors</h3>
+          <p>Find available donors by blood group and location, anytime you need.</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
-

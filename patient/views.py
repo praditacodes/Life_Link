@@ -54,6 +54,7 @@ def patient_dashboard_view(request):
     except Profile.DoesNotExist:
         return redirect('/accounts/profile/')
 
+@login_required
 def make_request_view(request):
     try:
         profile = Profile.objects.get(user=request.user)
@@ -78,6 +79,7 @@ def make_request_view(request):
     except Profile.DoesNotExist:
         return redirect('/accounts/profile/')
 
+@login_required
 def my_request_view(request):
     try:
         profile = Profile.objects.get(user=request.user)
