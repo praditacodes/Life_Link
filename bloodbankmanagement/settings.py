@@ -142,14 +142,20 @@ STATIC_DIR,
 LOGIN_REDIRECT_URL='/afterlogin'
 LOGIN_URL='/patient/patientlogin/'
 
-# Email configuration for OTP verification
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'praditabadal5@gmail.com'
-EMAIL_HOST_PASSWORD = 'mpeo nbzn tyrz okkl'
+
+# 🔐 These values are now fetched securely from environment variables
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# Optional: Who receives the contact/support emails
 EMAIL_RECEIVING_USER = ['support@bloodlink.com']
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
