@@ -7,6 +7,11 @@ from django.utils.html import strip_tags
 from django.contrib import messages
 from .models import CustomUser
 from django.utils import timezone
+from geopy.geocoders import GoogleV3
+import os
+
+GOOGLE_API_KEY = os.environ.get('GOOGLE_GEOCODING_API_KEY', 'YOUR_API_KEY_HERE')
+geolocator = GoogleV3(api_key=GOOGLE_API_KEY)
 
 def generate_otp():
     """Generate a 6-digit OTP"""

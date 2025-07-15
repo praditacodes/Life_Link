@@ -291,18 +291,12 @@ def reject_donation_view(request,pk):
 @login_required
 @user_passes_test(lambda u: u.is_authenticated)
 def search_donors_view(request):
-    from geopy.geocoders import Nominatim
-    from geopy.distance import geodesic
     from django.db.models import Q
     donors = []
-    search_coords = None
-    show_all = False
-    donor_markers = []
     blood_stock = None
     if request.method == 'GET':
         bloodgroup = request.GET.get('bloodgroup')
         city = request.GET.get('city')
-        radius = request.GET.get('radius', 10)
         if bloodgroup:
             # Fetch blood stock for the selected group
             try:
@@ -310,54 +304,13 @@ def search_donors_view(request):
                 blood_stock = stock_obj.unit
             except models.Stock.DoesNotExist:
                 blood_stock = 0
-            all_donors = Profile.objects.filter(blood_group=bloodgroup, can_donate=True)
-            local_donors = []
-            far_donors = []
-            donor_set = set()
+            # Filter donors by blood group and city (case-insensitive)
             if city:
-                geolocator = Nominatim(user_agent="blood_link")
-                try:
-                    location = geolocator.geocode(city)
-                    if location:
-                        search_coords = (location.latitude, location.longitude)
-                        for donor in all_donors:
-                            if donor.latitude and donor.longitude:
-                                donor_coords = (float(donor.latitude), float(donor.longitude))
-                                distance = geodesic(search_coords, donor_coords).kilometers
-                                donor.distance = distance
-                                if distance <= float(radius):
-                                    local_donors.append(donor)
-                                    donor_set.add(donor.pk)
-                                else:
-                                    far_donors.append(donor)
-                            else:
-                                far_donors.append(donor)
-                except Exception as e:
-                    print(f"Error in geocoding: {e}")
+                donors = Profile.objects.filter(blood_group__iexact=bloodgroup, can_donate=True, city__iexact=city)
             else:
-                far_donors = list(all_donors)
-            # If no local donors, show all
-            if not local_donors:
-                show_all = True
-                donors = far_donors
-            else:
-                donors = local_donors + [d for d in far_donors if d.pk not in donor_set]
-            # Sort by distance if available, else by city
-            donors.sort(key=lambda x: (getattr(x, 'distance', None) if hasattr(x, 'distance') and x.distance is not None else 99999, x.city or ''))
-            # Prepare donor_markers for map
-            for donor in donors:
-                if donor.latitude and donor.longitude:
-                    donor_markers.append({
-                        'lat': float(donor.latitude),
-                        'lng': float(donor.longitude),
-                        'name': f"{donor.user.first_name} {donor.user.last_name}",
-                        'city': donor.city or ''
-                    })
+                donors = Profile.objects.filter(blood_group__iexact=bloodgroup, can_donate=True)
     return render(request, 'blood/search.html', {
         'donors': donors,
-        'search_coords': search_coords,
-        'show_all': show_all,
-        'donor_markers': json.dumps(donor_markers),
         'blood_stock': blood_stock,
         'selected_bloodgroup': request.GET.get('bloodgroup', ''),
     })
