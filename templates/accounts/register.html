@@ -114,15 +114,21 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="font-weight-bold">Can Donate?</label>
-                        {% render_field profile_form.can_donate class="form-control" required="true" %}
+                        <div class="form-check">
+                            {% render_field profile_form.can_donate class="form-check-input" %}
+                            <label class="form-check-label font-weight-bold" for="id_can_donate">Can Donate?</label>
+                        </div>
+                        <small class="form-text text-muted">You must be at least 18 years old to donate blood.</small>
                         {% if profile_form.can_donate.errors %}
                             <div class="text-danger small">{{ profile_form.can_donate.errors.0 }}</div>
                         {% endif %}
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="font-weight-bold">Can Receive?</label>
-                        {% render_field profile_form.can_receive class="form-control" required="true" %}
+                        <div class="form-check">
+                            {% render_field profile_form.can_receive class="form-check-input" checked=True %}
+                            <label class="form-check-label font-weight-bold" for="id_can_receive">Can Receive?</label>
+                        </div>
+                        <small class="form-text text-muted">Anyone can receive blood.</small>
                         {% if profile_form.can_receive.errors %}
                             <div class="text-danger small">{{ profile_form.can_receive.errors.0 }}</div>
                         {% endif %}

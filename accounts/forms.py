@@ -51,8 +51,8 @@ class ProfileForm(forms.ModelForm):
         required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your pincode'}),
     )
-    can_donate = forms.BooleanField(required=True)
-    can_receive = forms.BooleanField(required=True)
+    can_donate = forms.BooleanField(required=False)
+    can_receive = forms.BooleanField(required=False)
     class Meta:
         model = Profile
         fields = [
@@ -71,8 +71,12 @@ class ProfileForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         age = cleaned_data.get('age')
+        can_donate = cleaned_data.get('can_donate')
         if age is not None and (age < 0 or age > 120):
             self.add_error('age', 'Age must be between 0 and 120.')
+        # Additional donor age validation
+        if can_donate and age is not None and age < 18:
+            self.add_error('age', 'You must be at least 18 years old to register as a donor.')
         return cleaned_data
 
 class OTPVerificationForm(forms.Form):

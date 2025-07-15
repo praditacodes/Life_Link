@@ -75,6 +75,9 @@ def donor_dashboard_view(request):
 
 def donate_blood_view(request):
     profile = Profile.objects.get(user=request.user)
+    if profile.age is None or profile.age == '' or profile.age < 18:
+        messages.error(request, 'You must be at least 18 years old to donate blood.')
+        return render(request, 'donor/donate_blood.html', {'donation_form': None})
     initial_data = {
         'bloodgroup': profile.blood_group,
         'age': getattr(profile, 'age', ''),
@@ -83,9 +86,6 @@ def donate_blood_view(request):
     if request.method == 'POST':
         donation_form = forms.DonationForm(request.POST)
         if donation_form.is_valid():
-            if profile.age is None or profile.age == '':
-                messages.error(request, 'Your age is not set. Please update your profile before donating.')
-                return render(request, 'donor/donate_blood.html', {'donation_form': donation_form})
             blood_donate = donation_form.save(commit=False)
             blood_donate.bloodgroup = profile.blood_group
             blood_donate.age = profile.age
