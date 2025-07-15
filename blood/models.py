@@ -15,7 +15,7 @@ BLOOD_GROUP_CHOICES = [
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
     phone_number = PhoneNumberField(unique=True, null=True, blank=True)
-    is_phone_verified = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6, null=True, blank=True)
     otp_created_at = models.DateTimeField(null=True, blank=True)
 

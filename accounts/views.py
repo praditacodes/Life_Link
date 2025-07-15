@@ -146,7 +146,7 @@ def custom_login_view(request):
             if user and form.is_valid():
                 otp = form.cleaned_data['otp']
                 if user.otp == otp and user.otp_created_at and (timezone.now() - user.otp_created_at).seconds < 600:
-                    user.is_phone_verified = True
+                    user.is_verified = True
                     user.otp = None
                     user.otp_created_at = None
                     user.save()
@@ -161,10 +161,10 @@ def custom_login_view(request):
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(request, username=username, password=password)
-            print('DEBUG: is_phone_verified =', user.is_phone_verified)
             if user is not None:
+                print('DEBUG: is_verified =', user.is_verified)
                 # Only require OTP if user is not verified
-                if not user.is_phone_verified:
+                if not user.is_verified:
                     send_otp_via_email(user)
                     request.session['otp_username'] = user.username
                     form = OTPVerificationForm()

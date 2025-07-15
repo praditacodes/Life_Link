@@ -345,7 +345,7 @@ def verify_otp(request):
             user = request.user
             
             if user.otp == otp and is_otp_valid(user.otp_created_at):
-                user.is_phone_verified = True  # We'll keep this field name for compatibility
+                user.is_verified = True
                 user.otp = None
                 user.otp_created_at = None
                 user.save()
