@@ -85,8 +85,8 @@ def profile_update_view(request):
 @login_required
 def user_dashboard_view(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
-    if request.user.is_superuser:
-        return render(request, 'blood/admin_dashboard.html')
+    if request.user.is_superuser or request.user.is_staff:
+        return redirect('/admin-dashboard')
 
     # Fetch recent donations and requests
     from donor.models import BloodDonate
@@ -152,15 +152,24 @@ def custom_login_view(request):
                     user.save()
                     login(request, user)
                     messages.success(request, 'Login successful!')
-                    return redirect('user-dashboard')
+                    if user.is_superuser or user.is_staff:
+                        return redirect('/admin-dashboard')
+                    else:
+                        return redirect('user-dashboard')
                 else:
                     messages.error(request, 'Invalid or expired OTP.')
             return render(request, 'accounts/otp_login.html', {'form': form})
         else:
-            # Step 1: Validate credentials
-            username = request.POST.get('username')
+            # Step 1: Validate credentials using email
+            email = request.POST.get('email')
             password = request.POST.get('password')
-            user = authenticate(request, username=username, password=password)
+            user = None
+            if email and password:
+                try:
+                    user_obj = CustomUser.objects.get(email=email)
+                    user = authenticate(request, username=user_obj.username, password=password)
+                except CustomUser.DoesNotExist:
+                    user = None
             if user is not None:
                 print('DEBUG: is_verified =', user.is_verified)
                 # Only require OTP if user is not verified
@@ -172,9 +181,12 @@ def custom_login_view(request):
                 else:
                     login(request, user)
                     messages.success(request, 'Login successful!')
-                    return redirect('user-dashboard')
+                    if user.is_superuser or user.is_staff:
+                        return redirect('/admin-dashboard')
+                    else:
+                        return redirect('user-dashboard')
             else:
-                messages.error(request, 'No account found with that username or email. Please register first.')
+                messages.error(request, 'No account found with that email or password. Please register first.')
     return render(request, 'accounts/custom_login.html')
 
 def custom_logout(request):

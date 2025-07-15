@@ -190,7 +190,7 @@
                 {% for donor in top_donors %}
                 <tr>
                   <td>{{donor.donor__user__first_name}} {{donor.donor__user__last_name}}</td>
-                  <td>{{donor.donor__bloodgroup}}</td>
+                  <td>{{donor.donor__blood_group}}</td>
                   <td>{{donor.total_units}}</td>
                   <td>{{donor.donation_count}}</td>
                   <td>{{donor.last_donation}}</td>
@@ -205,80 +205,8 @@
       </div>
     </div>
     <!-- Charts -->
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <div class="card bg-light">
-          <div class="card-body">
-            <h5 class="card-title">Donations Per Month</h5>
-            <canvas id="donationsChart"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="card bg-light">
-          <div class="card-body">
-            <h5 class="card-title">Blood Group Distribution</h5>
-            <canvas id="bloodGroupChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Removed Donations Per Month and Blood Group Distribution charts -->
 </div>
 
-<!-- Safely inject chart data -->
-{{ chart_labels|json_script:"chart-labels" }}
-{{ chart_data|json_script:"chart-data" }}
-{{ bg_labels|json_script:"bg-labels" }}
-{{ bg_data|json_script:"bg-data" }}
-
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // Parse data from safe script tags
-  var chartLabels = JSON.parse(document.getElementById('chart-labels').textContent);
-  var chartData = JSON.parse(document.getElementById('chart-data').textContent);
-  var bgLabels = JSON.parse(document.getElementById('bg-labels').textContent);
-  var bgData = JSON.parse(document.getElementById('bg-data').textContent);
-
-  // Donations Per Month
-  var ctx1 = document.getElementById('donationsChart').getContext('2d');
-  var donationsChart = new Chart(ctx1, {
-    type: 'bar',
-    data: {
-      labels: chartLabels,
-      datasets: [{
-        label: 'Units Donated',
-        data: chartData,
-        backgroundColor: 'rgba(244,67,54,0.7)',
-        borderColor: 'rgba(244,67,54,1)',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true } }
-    }
-  });
-  // Blood Group Distribution
-  var ctx2 = document.getElementById('bloodGroupChart').getContext('2d');
-  var bloodGroupChart = new Chart(ctx2, {
-    type: 'pie',
-    data: {
-      labels: bgLabels,
-      datasets: [{
-        label: 'Units',
-        data: bgData,
-        backgroundColor: [
-          '#f44336','#e57373','#ba68c8','#64b5f6','#4caf50','#ffd54f','#ff8a65','#a1887f'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom' } }
-    }
-  });
-</script>
+<!-- Removed chart data and Chart.js scripts -->
 {% endblock content %}

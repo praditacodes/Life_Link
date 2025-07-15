@@ -98,6 +98,9 @@
         <span class="cute-icon">🔍</span>
         Search Donor
     </div>
+    {% if user_city %}
+    <div class="alert alert-info text-center" style="font-size:1.05rem;">Your city: <b>{{ user_city }}</b></div>
+    {% endif %}
     <form method="get">
         <div class="form-group">
             <label for="id_bloodgroup">Blood Group</label>
@@ -114,8 +117,8 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="id_city">Location <span style="color:#FF3B30;">*</span></label>
-            <input type="text" name="city" id="id_city" class="form-control" placeholder="Enter location (required)" required />
+            <label for="id_city">City (optional)</label>
+            <input type="text" name="city" id="id_city" class="form-control" placeholder="Enter your city (optional)" />
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Search</button>
@@ -175,26 +178,5 @@
   <div class="alert alert-warning text-center mt-3">No donors found in your area. Showing all matching blood group donors.</div>
 {% endif %}
 
-{% if search_coords %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<div id="map" style="height: 350px; width: 100%; margin-bottom: 2rem; border-radius: 1rem;"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-  var map = L.map('map').setView([{{ search_coords.0 }}, {{ search_coords.1 }}], 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
-  // Search location marker
-  L.marker([{{ search_coords.0 }}, {{ search_coords.1 }}]).addTo(map)
-    .bindPopup('Search Location').openPopup();
-  // Donor markers from JSON
-  var donorMarkers = {{ donor_markers|safe }};
-  donorMarkers.forEach(function(d) {
-    L.marker([d.lat, d.lng]).addTo(map)
-      .bindPopup(d.name + '<br>' + d.city);
-  });
-</script>
-{% endif %}
 </div>
 {% endblock content %} 

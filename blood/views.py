@@ -85,25 +85,6 @@ def admin_dashboard_view(request):
         .annotate(total_units=Sum('unit'), donation_count=Count('id'), last_donation=Max('date'))
         .order_by('-total_units')[:5]
     )
-    # Donations per month (for chart)
-    donations_per_month = (
-        dmodels.BloodDonate.objects.filter(status='Approved')
-        .annotate(month=TruncMonth('date'))
-        .values('month')
-        .annotate(total=Sum('unit'))
-        .order_by('month')
-    )
-    chart_labels = [d['month'].strftime('%b %Y') for d in donations_per_month]
-    chart_data = [d['total'] for d in donations_per_month]
-    # Blood group distribution (for chart)
-    bloodgroup_dist = (
-        dmodels.BloodDonate.objects.filter(status='Approved')
-        .values('bloodgroup')
-        .annotate(total=Sum('unit'))
-        .order_by('-total')
-    )
-    bg_labels = [d['bloodgroup'] for d in bloodgroup_dist]
-    bg_data = [d['total'] for d in bloodgroup_dist]
     dict = {
         'A1': models.Stock.objects.get_or_create(bloodgroup="A+")[0],
         'A2': models.Stock.objects.get_or_create(bloodgroup="A-")[0],
@@ -120,10 +101,6 @@ def admin_dashboard_view(request):
         'total_donations': total_donations,
         'total_units_donated': total_units_donated,
         'top_donors': top_donors,
-        'chart_labels': json.dumps(chart_labels),
-        'chart_data': json.dumps(chart_data),
-        'bg_labels': json.dumps(bg_labels),
-        'bg_data': json.dumps(bg_data),
     }
     return render(request, 'blood/admin_dashboard.html', context=dict)
 
@@ -294,9 +271,15 @@ def search_donors_view(request):
     from django.db.models import Q
     donors = []
     blood_stock = None
+    user_city = None
+    if request.user.is_authenticated:
+        try:
+            user_city = request.user.profile.city
+        except Exception:
+            user_city = None
     if request.method == 'GET':
         bloodgroup = request.GET.get('bloodgroup')
-        city = request.GET.get('city')
+        # city = request.GET.get('city')  # No longer used for filtering
         if bloodgroup:
             # Fetch blood stock for the selected group
             try:
@@ -304,15 +287,13 @@ def search_donors_view(request):
                 blood_stock = stock_obj.unit
             except models.Stock.DoesNotExist:
                 blood_stock = 0
-            # Filter donors by blood group and city (case-insensitive)
-            if city:
-                donors = Profile.objects.filter(blood_group__iexact=bloodgroup, can_donate=True, city__iexact=city)
-            else:
-                donors = Profile.objects.filter(blood_group__iexact=bloodgroup, can_donate=True)
+            # Filter donors by blood group only
+            donors = Profile.objects.filter(blood_group__iexact=bloodgroup, can_donate=True)
     return render(request, 'blood/search.html', {
         'donors': donors,
         'blood_stock': blood_stock,
         'selected_bloodgroup': request.GET.get('bloodgroup', ''),
+        'user_city': user_city,
     })
 
 def verify_email(request):
