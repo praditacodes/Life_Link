@@ -35,7 +35,6 @@ def home_view(request):
     if request.user.is_authenticated:
         return redirect('user-dashboard')  # or the appropriate dashboard for the user
     x = models.Stock.objects.all()
-    print(x)
     if len(x) == 0:
         blood1 = models.Stock()
         blood1.bloodgroup = "A+"
@@ -61,7 +60,6 @@ def home_view(request):
         blood8 = models.Stock()
         blood8.bloodgroup = "O-"
         blood8.save()
-    # Always show landing page, even for logged-in users
     return render(request, 'blood/index.html')
 
 def is_donor(user):

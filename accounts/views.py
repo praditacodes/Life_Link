@@ -146,6 +146,7 @@ def custom_login_view(request):
             if user and form.is_valid():
                 otp = form.cleaned_data['otp']
                 if user.otp == otp and user.otp_created_at and (timezone.now() - user.otp_created_at).seconds < 600:
+                    user.is_phone_verified = True
                     user.otp = None
                     user.otp_created_at = None
                     user.save()
@@ -156,15 +157,22 @@ def custom_login_view(request):
                     messages.error(request, 'Invalid or expired OTP.')
             return render(request, 'accounts/otp_login.html', {'form': form})
         else:
-            # Step 1: Validate credentials and send OTP
+            # Step 1: Validate credentials
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(request, username=username, password=password)
+            print('DEBUG: is_phone_verified =', user.is_phone_verified)
             if user is not None:
-                send_otp_via_email(user)
-                request.session['otp_username'] = user.username
-                form = OTPVerificationForm()
-                return render(request, 'accounts/otp_login.html', {'form': form})
+                # Only require OTP if user is not verified
+                if not user.is_phone_verified:
+                    send_otp_via_email(user)
+                    request.session['otp_username'] = user.username
+                    form = OTPVerificationForm()
+                    return render(request, 'accounts/otp_login.html', {'form': form})
+                else:
+                    login(request, user)
+                    messages.success(request, 'Login successful!')
+                    return redirect('user-dashboard')
             else:
                 messages.error(request, 'Invalid username or password.')
     return render(request, 'accounts/custom_login.html')

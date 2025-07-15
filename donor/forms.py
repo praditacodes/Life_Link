@@ -76,3 +76,11 @@ class DonationForm(forms.ModelForm):
             self.fields['bloodgroup'].widget.attrs['readonly'] = True
         if self.initial.get('age'):
             self.fields['age'].widget.attrs['readonly'] = True
+        # Set minimum value for unit field to 450 mL
+        self.fields['unit'].widget.attrs['min'] = 450
+
+    def clean_unit(self):
+        unit = self.cleaned_data.get('unit')
+        if unit is not None and unit < 450:
+            raise forms.ValidationError('The minimum donation amount is 450 mL.')
+        return unit

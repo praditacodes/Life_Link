@@ -16,6 +16,16 @@ class RequestForm(forms.ModelForm):
         model=models.BloodRequest
         fields=['patient_name','patient_age','reason','blood_group','unit']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['unit'].widget.attrs['min'] = 450
+
+    def clean_unit(self):
+        unit = self.cleaned_data.get('unit')
+        if unit is not None and unit < 450:
+            raise forms.ValidationError('The minimum request amount is 450 mL.')
+        return unit
+
 class OTPVerificationForm(forms.Form):
     otp = forms.CharField(max_length=6, min_length=6, widget=forms.TextInput(attrs={'class': 'input--style-5'}))
 

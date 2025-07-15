@@ -43,10 +43,10 @@
             <a class="nav-link" style="color: white;" href="{% if user.is_authenticated %}{% url 'user-dashboard' %}{% else %}/{% endif %}"><i class="fas fa-home"></i>&nbsp; Home</a>
           </li>
           {% if user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" style="color: white; font-weight: 700; opacity: 1;" href="/logout">Logout</a></li>
           {% else %}
-            <li class="nav-item"><a class="nav-link" href="/accounts/register/">Register</a></li>
-            <li class="nav-item"><a class="nav-link" href="/accounts/login/">Login</a></li>
+            <li class="nav-item"><a class="nav-link" style="color: white; font-weight: 600;" href="/accounts/register/">Register</a></li>
+            <li class="nav-item"><a class="nav-link" style="color: white; font-weight: 600;" href="/accounts/login/">Login</a></li>
           {% endif %}
           <li class="nav-item">
             <a class="nav-link" style="color: white;" href="/adminlogin"><i class="fas fa-user-shield"></i>&nbsp; Admin</a>

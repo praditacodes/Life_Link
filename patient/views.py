@@ -71,7 +71,7 @@ def make_request_view(request):
                 blood_request = request_form.save(commit=False)
                 blood_request.patient_name = profile.user.first_name + ' ' + profile.user.last_name
                 blood_request.patient_age = profile.age
-                blood_request.bloodgroup = profile.blood_group
+                blood_request.blood_group = profile.blood_group  # Correct field name
                 blood_request.requested_by = profile
                 blood_request.save()
                 return HttpResponseRedirect('my-request')

@@ -30,7 +30,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
 
     
-    path('', TemplateView.as_view(template_name='blood/index.html'), name='home'),
+    path('', views.home_view, name='home'),
     path('logout/', views.logout_view, name='logout'),
     path('search-donors/', views.search_donors_view, name='search-donors'),
 

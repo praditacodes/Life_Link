@@ -110,8 +110,9 @@
                 {{ donation_form.bloodgroup|add_class:'form-control' }}
             </div>
             <div class="form-group">
-                <label for="id_unit">Unit (1 unit = 450 ml)</label>
+                <label for="id_unit">Unit (in mL)</label>
                 {{ donation_form.unit|add_class:'form-control' }}
+                <small style="color:#C62828; font-size:0.98em; display:block; margin-top:0.3em;">The minimum standard blood donation amount is generally 450 milliliters (mL).</small>
             </div>
             <div class="form-group">
                 <label for="id_diseases">Diseases (if any)</label>
