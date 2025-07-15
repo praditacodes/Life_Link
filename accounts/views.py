@@ -174,7 +174,7 @@ def custom_login_view(request):
                     messages.success(request, 'Login successful!')
                     return redirect('user-dashboard')
             else:
-                messages.error(request, 'Invalid username or password.')
+                messages.error(request, 'No account found with that username or email. Please register first.')
     return render(request, 'accounts/custom_login.html')
 
 def custom_logout(request):
